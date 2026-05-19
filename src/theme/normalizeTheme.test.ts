@@ -35,9 +35,15 @@ describe('normalizeTheme', () => {
     expect(theme.colors['surface-container']).toBeDefined();
     expect(theme.components['button-primary'].backgroundColor).toBe('#5e6ad2');
     expect(theme.components['button-primary'].border).toBe('1px solid #5e6ad2');
+    expect(theme.colorSwatches).toEqual([
+      { name: 'Background', hex: '#101010', role: 'background', token: 'background' },
+      { name: 'Surface', hex: '#181818', role: 'surface', token: 'surface' },
+      { name: 'Primary', hex: '#5e6ad2', role: 'primary', token: 'primary' },
+      { name: 'Secondary', hex: '#0f766e', role: 'secondary', token: 'secondary' },
+      { name: 'Tertiary', hex: '#a855f7', role: 'tertiary', token: 'tertiary' },
+    ]);
     expect(theme.warnings).toEqual(
       expect.arrayContaining([expect.stringContaining('Missing color token "secondary"')]),
     );
   });
 });
-

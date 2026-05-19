@@ -12,6 +12,10 @@ const theme: NormalizedTheme = {
   mood: '柔和雅致',
   source: '小红书',
   ...baseFoundation,
+  colorSwatches: [
+    { name: 'Alice Blue', hex: '#f0f8ff', role: 'background' },
+    { name: 'Pale Slate', hex: '#b8a9c9', role: 'primary' },
+  ],
   markdownBody: '## 感受\n柔和雅致，像清晨薄雾。',
   warnings: ['Palette-derived theme uses Base UI Foundation typography, spacing, radius, and component tokens.'],
 };

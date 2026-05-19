@@ -11,6 +11,10 @@ const theme: NormalizedTheme = {
   name: 'Demo Theme',
   tags: [],
   ...baseFoundation,
+  colorSwatches: [
+    { name: 'Background', hex: '#f7f8fa', role: 'background', token: 'background' },
+    { name: 'Primary', hex: '#2563eb', role: 'primary', token: 'primary' },
+  ],
   markdownBody: '',
   warnings: [],
 };
@@ -28,6 +32,9 @@ describe('PreviewStage', () => {
 
     await user.click(screen.getByRole('tab', { name: 'Components' }));
     expect(screen.getByText('Buttons')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('tab', { name: 'Color Card' }));
+    expect(screen.getByText('Background')).toBeInTheDocument();
+    expect(screen.getByText('HEX: #F7F8FA')).toBeInTheDocument();
   });
 });
-

@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { themeToCssVars } from '../../theme/cssVars';
 import type { NormalizedTheme } from '../../types/theme';
 import { ComponentsPreview } from '../previews/ComponentsPreview';
+import { ColorCardPreview } from '../previews/ColorCardPreview';
 import { DashboardPreview } from '../previews/DashboardPreview';
 import { LandingPreview } from '../previews/LandingPreview';
 import { MobilePreview } from '../previews/MobilePreview';
 
-const tabs = ['Dashboard', 'Landing', 'Mobile', 'Components'] as const;
+const tabs = ['Dashboard', 'Landing', 'Mobile', 'Components', 'Color Card'] as const;
 type PreviewTab = (typeof tabs)[number];
 
 interface PreviewStageProps {
@@ -43,8 +44,8 @@ export function PreviewStage({ theme }: PreviewStageProps) {
         {activeTab === 'Landing' && <LandingPreview />}
         {activeTab === 'Mobile' && <MobilePreview />}
         {activeTab === 'Components' && <ComponentsPreview />}
+        {activeTab === 'Color Card' && <ColorCardPreview theme={theme} />}
       </div>
     </section>
   );
 }
-

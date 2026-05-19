@@ -95,6 +95,11 @@ export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
     tags: source.tags,
     source: source.source,
     mood: source.mood,
+    colorSwatches: swatches.map((swatch) => ({
+      name: swatch.name,
+      hex: swatch.hex,
+      role: swatch.role,
+    })),
     colors: {
       ...baseFoundation.colors,
       ...paletteTokens,
@@ -139,4 +144,3 @@ export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
     warnings,
   };
 }
-

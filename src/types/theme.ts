@@ -22,6 +22,13 @@ export interface PaletteColor {
   role?: string;
 }
 
+export interface ColorSwatch {
+  name: string;
+  hex: string;
+  role?: string;
+  token?: string;
+}
+
 export interface GradientToken {
   from: string;
   to: string;
@@ -54,6 +61,7 @@ export interface NormalizedTheme {
   source?: string;
   mood?: string;
   colors: Record<string, string>;
+  colorSwatches: ColorSwatch[];
   gradients: GradientToken[];
   typography: Record<string, TypographyToken>;
   rounded: Record<string, string>;

@@ -34,7 +34,13 @@ describe('derivePaletteTheme', () => {
     expect(theme.colors['on-surface']).toBe('#ffffff');
     expect(theme.typography['body-md'].fontFamily).toBe('Inter');
     expect(theme.components['button-primary'].backgroundColor).toBe('{colors.primary}');
+    expect(theme.colorSwatches).toEqual([
+      { name: 'Alice Blue', hex: '#f0f8ff', role: 'background' },
+      { name: 'Pearl Aqua', hex: '#88d8c0', role: 'secondary' },
+      { name: 'Pale Slate', hex: '#b8a9c9', role: 'primary' },
+      { name: 'Lilac Ash', hex: '#c9a0b0', role: 'accent' },
+      { name: 'Mauve Shadow', hex: '#5c3d52', role: 'surface' },
+    ]);
     expect(theme.warnings).toContain('Palette-derived theme uses Base UI Foundation typography, spacing, radius, and component tokens.');
   });
 });
-
