@@ -6,7 +6,7 @@ It collects complete theme specs from `themes/` and lightweight color palettes f
 
 ## Project Status
 
-This repository is in early development. The current source assets are Markdown theme and palette files, plus design and implementation docs under `docs/superpowers/`.
+The first local workbench is implemented. It loads Markdown sources from `themes/` and `palettes/`, normalizes them into previewable themes, and renders Dashboard, Landing, Mobile, and Components previews.
 
 ## Repository Structure
 
@@ -15,6 +15,7 @@ themes/                     Full theme Markdown specs
 palettes/                   Lightweight palette Markdown specs
 docs/superpowers/specs/     Product and technical design specs
 docs/superpowers/plans/     Implementation plans
+src/                        React workbench, parser, normalizer, and previews
 AGENTS.md                   Instructions for future coding agents
 ```
 
@@ -75,6 +76,21 @@ Palette notes go here.
 ## Development Notes
 
 See `AGENTS.md` before implementing. It records the current project conventions, known dependency caveats, local ports, and verification expectations.
+
+Install and run:
+
+```powershell
+npm install
+npm run dev
+```
+
+Verify:
+
+```powershell
+npm test
+npm run typecheck
+npm run build
+```
 
 Preferred local ports:
 

@@ -1,0 +1,64 @@
+export type ThemeKind = 'theme' | 'palette-derived';
+export type SourceKind = 'theme' | 'palette';
+
+export interface TypographyToken {
+  fontFamily: string;
+  fontSize: string;
+  fontWeight: string;
+  lineHeight: string;
+  letterSpacing?: string;
+}
+
+export type ComponentPrimitive = string | number | boolean | null;
+export interface ComponentArray extends Array<ComponentValue> {}
+export interface ComponentToken {
+  [key: string]: ComponentValue;
+}
+export type ComponentValue = ComponentPrimitive | ComponentToken | ComponentArray;
+
+export interface PaletteColor {
+  name: string;
+  hex: string;
+  role?: string;
+}
+
+export interface GradientToken {
+  from: string;
+  to: string;
+}
+
+export interface ParsedThemeSource {
+  sourceKind: SourceKind;
+  filePath: string;
+  id: string;
+  name: string;
+  tags: string[];
+  source?: string;
+  mood?: string;
+  colors: Record<string, string> | PaletteColor[];
+  gradients: GradientToken[];
+  typography?: Record<string, TypographyToken>;
+  rounded?: Record<string, string>;
+  spacing?: Record<string, string>;
+  components?: Record<string, ComponentToken>;
+  markdownBody: string;
+  warnings: string[];
+}
+
+export interface NormalizedTheme {
+  id: string;
+  kind: ThemeKind;
+  filePath: string;
+  name: string;
+  tags: string[];
+  source?: string;
+  mood?: string;
+  colors: Record<string, string>;
+  gradients: GradientToken[];
+  typography: Record<string, TypographyToken>;
+  rounded: Record<string, string>;
+  spacing: Record<string, string>;
+  components: Record<string, ComponentToken>;
+  markdownBody: string;
+  warnings: string[];
+}
