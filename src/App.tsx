@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { loadThemeLibrary } from './data/themeLoader';
 import { PreviewStage } from './components/workbench/PreviewStage';
+import { PaletteExtractor } from './components/workbench/PaletteExtractor';
 import { SearchAndFilters, type ThemeFilter } from './components/workbench/SearchAndFilters';
 import { ThemeInspector } from './components/workbench/ThemeInspector';
 import { ThemeLibrary } from './components/workbench/ThemeLibrary';
@@ -44,6 +45,7 @@ export default function App() {
       {selectedTheme ? (
         <div className="workbench-grid">
           <aside className="library-panel" aria-label="Theme source browser">
+            <PaletteExtractor />
             <SearchAndFilters
               query={query}
               filter={filter}
@@ -69,4 +71,3 @@ export default function App() {
     </main>
   );
 }
-
