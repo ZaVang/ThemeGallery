@@ -37,7 +37,7 @@ export function AppShell() {
       <AppTopNav activePage={activePage} onPageChange={setActivePage} />
       {activePage === 'themes' && <ThemeWorkbenchPage />}
       {activePage === 'inspirations' && <InspirationsPage onApplyAppearancePatch={setAppearancePatch} />}
-      {activePage === 'composer' && <ComposerPage />}
+      {activePage === 'composer' && <ComposerPage onApplyAppearancePatch={setAppearancePatch} />}
       {activePage === 'settings' && (
         <SettingsPage activeAppearanceId={baseAppearancePreset.id} onAppearanceChange={handleAppearancePresetChange} />
       )}

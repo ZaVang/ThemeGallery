@@ -2,26 +2,27 @@ import { useMemo, useState } from 'react';
 import { PageHeader } from '../../components/common/PageHeader';
 import type { AppAppearancePatch } from '../../app/appearance/appAppearancePatch';
 import {
+  getInspirationAtoms,
+  getInspirationCombinations,
   inspirationDimensionLabels,
   inspirationDimensions,
-  inspirationReferences,
   type InspirationDimension,
   type InspirationReference,
 } from '../../inspirations/inspirationReferences';
 
-type DimensionFilter = 'all' | InspirationDimension;
+type DimensionFilter = 'combinations' | InspirationDimension;
 
 interface InspirationsPageProps {
   onApplyAppearancePatch: (patch: AppAppearancePatch) => void;
 }
 
 export function InspirationsPage({ onApplyAppearancePatch }: InspirationsPageProps) {
-  const [activeDimension, setActiveDimension] = useState<DimensionFilter>('all');
+  const [activeDimension, setActiveDimension] = useState<DimensionFilter>('combinations');
   const visibleReferences = useMemo(
     () =>
-      activeDimension === 'all'
-        ? inspirationReferences
-        : inspirationReferences.filter((reference) => reference.dimensions.includes(activeDimension)),
+      activeDimension === 'combinations'
+        ? getInspirationCombinations()
+        : getInspirationAtoms(activeDimension),
     [activeDimension],
   );
 
@@ -36,12 +37,12 @@ export function InspirationsPage({ onApplyAppearancePatch }: InspirationsPagePro
       <section className="inspiration-workspace">
         <div className="dimension-filter" aria-label="Inspiration dimension filters">
           <button
-            aria-pressed={activeDimension === 'all'}
-            className={activeDimension === 'all' ? 'filter-pill is-active' : 'filter-pill'}
+            aria-pressed={activeDimension === 'combinations'}
+            className={activeDimension === 'combinations' ? 'filter-pill is-active' : 'filter-pill'}
             type="button"
-            onClick={() => setActiveDimension('all')}
+            onClick={() => setActiveDimension('combinations')}
           >
-            All
+            Combinations
           </button>
           {inspirationDimensions.map((dimension) => (
             <button
@@ -89,7 +90,7 @@ function InspirationCard({ reference, onApplyAppearancePatch }: InspirationCardP
       </div>
       <div className="inspiration-card__body">
         <div className="inspiration-card__heading">
-          <span>{sourceTypeLabel(reference.sourceType)}</span>
+          <span>{reference.kind === 'atom' ? `${inspirationDimensionLabels[reference.dimensions[0]]} atom` : sourceTypeLabel(reference.sourceType)}</span>
           <h2>{reference.name}</h2>
         </div>
         <p>{reference.summary}</p>

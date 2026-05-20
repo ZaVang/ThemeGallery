@@ -22,3 +22,19 @@ export function resolveAppAppearance(
     },
   };
 }
+
+export function mergeAppAppearancePatches(patches: Array<AppAppearancePatch | undefined>): AppAppearancePatch {
+  return patches.reduce<AppAppearancePatch>((merged, patch) => {
+    if (!patch) {
+      return merged;
+    }
+
+    return {
+      material: patch.material ?? merged.material,
+      tokens: {
+        ...(merged.tokens ?? {}),
+        ...(patch.tokens ?? {}),
+      },
+    };
+  }, {});
+}

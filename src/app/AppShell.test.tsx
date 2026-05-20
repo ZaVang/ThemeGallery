@@ -53,4 +53,19 @@ describe('AppShell', () => {
     expect(appRoot).toHaveStyle({ '--app-accent': '#54ACBF' });
     expect(appRoot).toHaveAttribute('data-app-material', 'glass');
   });
+
+  it('applies a composed style mix to the app appearance', async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const nav = screen.getByRole('navigation', { name: 'Primary pages' });
+    await user.click(within(nav).getByRole('button', { name: 'Composer' }));
+    await user.click(screen.getByRole('button', { name: 'Use Luna Ocean Color' }));
+    await user.click(screen.getByRole('button', { name: 'Use Editorial Serif Type' }));
+    await user.click(screen.getByRole('button', { name: 'Apply style mix to app appearance' }));
+
+    const appRoot = screen.getByTestId('app-root');
+    expect(appRoot).toHaveStyle({ '--app-accent': '#54ACBF' });
+    expect(appRoot.getAttribute('style')).toContain('Georgia');
+  });
 });
