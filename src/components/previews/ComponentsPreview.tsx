@@ -12,6 +12,8 @@ export function ComponentsPreview() {
           <h3>Buttons</h3>
           <div className="inline-actions">
             <button className="preview-button" type="button">Primary</button>
+            <button className="preview-button secondary" type="button">Secondary</button>
+            <button className="preview-button tertiary" type="button">Tertiary</button>
             <button className="preview-button ghost" type="button">Ghost</button>
           </div>
         </section>
@@ -24,6 +26,11 @@ export function ComponentsPreview() {
           <div className="inline-actions">
             <span className="preview-badge">Palette</span>
             <span className="preview-badge secondary">Ready</span>
+            <span className="preview-badge tertiary">Accent</span>
+            <span className="preview-badge success">Live</span>
+            <span className="preview-badge warning">Review</span>
+            <span className="preview-badge info">Info</span>
+            <span className="preview-badge error">Risk</span>
           </div>
         </section>
         <section className="preview-card">
@@ -37,4 +44,3 @@ export function ComponentsPreview() {
     </div>
   );
 }
-

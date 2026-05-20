@@ -11,6 +11,7 @@ describe('AppShell', () => {
 
     expect(nav).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Themes' })).toHaveAttribute('aria-current', 'page');
+    expect(within(nav).getByRole('button', { name: 'Import' })).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Inspirations' })).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Composer' })).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Settings' })).toBeInTheDocument();
@@ -27,6 +28,18 @@ describe('AppShell', () => {
 
     expect(within(nav).getByRole('button', { name: 'Inspirations' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('heading', { name: 'Inspirations' })).toBeInTheDocument();
+  });
+
+  it('opens image import as a dedicated page', async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const nav = screen.getByRole('navigation', { name: 'Primary pages' });
+    await user.click(within(nav).getByRole('button', { name: 'Import' }));
+
+    expect(within(nav).getByRole('button', { name: 'Import' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('heading', { name: 'Import' })).toBeInTheDocument();
+    expect(screen.getByText('Palette Extractor')).toBeInTheDocument();
   });
 
   it('applies a selected app appearance preset through --app variables', async () => {
@@ -67,5 +80,17 @@ describe('AppShell', () => {
     const appRoot = screen.getByTestId('app-root');
     expect(appRoot).toHaveStyle({ '--app-accent': '#54ACBF' });
     expect(appRoot.getAttribute('style')).toContain('Georgia');
+  });
+
+  it('applies a selected full theme to the whole app shell', async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole('button', { name: 'Apply LuxCart to app appearance' }));
+
+    const appRoot = screen.getByTestId('app-root');
+    expect(appRoot).toHaveStyle({ '--app-bg': '#fffbeb' });
+    expect(appRoot).toHaveStyle({ '--app-accent': '#b8860b' });
+    expect(appRoot.getAttribute('style')).toContain('Cormorant Garamond');
   });
 });

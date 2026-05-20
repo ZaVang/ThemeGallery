@@ -1,8 +1,13 @@
 ---
 name: Luna Ocean
+summary: A cool monochrome blue ramp for calm, technical, low-glare interfaces.
 tags: [cool, blue, gradient, minimal, calm]
 mood: 静谧清冷，像深夜海面倒映月光
 source: 小红书 544414632
+kind: atom
+sourceType: palette
+dimensions:
+  - color
 colors:
   - name: Ice Mint
     hex: "#A7EBF2"
@@ -22,6 +27,21 @@ colors:
 gradients:
   - from: "#A7EBF2"
     to: "#011C40"
+tokens:
+  bg: "#071F33"
+  bgElevated: "#0C2E48"
+  surface: "#104460"
+  surfaceMuted: "#082740"
+  text: "#E7FAFF"
+  textMuted: "#A7EBF2"
+  border: "rgb(167 235 242 / 0.26)"
+  borderStrong: "#A7EBF2"
+  accent: "#54ACBF"
+  accentText: "#011C40"
+cues:
+  - aqua highlight
+  - deep navy base
+  - single-hue contrast ladder
 ---
 
 ## 感受

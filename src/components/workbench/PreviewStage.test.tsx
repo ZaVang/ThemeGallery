@@ -7,7 +7,7 @@ import { PreviewStage } from './PreviewStage';
 const theme: NormalizedTheme = {
   id: 'demo',
   kind: 'theme',
-  filePath: 'themes/demo.md',
+  filePath: 'assets/designs/demo.md',
   name: 'Demo Theme',
   tags: [],
   ...baseFoundation,

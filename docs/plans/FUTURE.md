@@ -4,13 +4,13 @@
 
 Source plan: `docs/superpowers/plans/2026-05-19-theme-gallery-implementation.md`
 
-Build the first local React/Vite workbench that reads `themes/*.md` and `palettes/*.md`, normalizes them into previewable themes, and renders realistic Dashboard, Landing, Mobile, and Components previews.
+Build the first local React/Vite workbench that reads `assets/designs/*.md` and `assets/colors/*.md`, normalizes them into previewable themes, and renders realistic Dashboard, Landing, Mobile, and Components previews.
 
 ## Sprint 1: Save Palettes Into The Local Library
 
 Goal: turn the Palette Extractor from a temporary helper into the main ingestion flow.
 
-- Add a local save path that writes generated palette Markdown into `palettes/*.md`.
+- Add a local save path that writes generated palette Markdown into `assets/colors/*.md`.
 - Keep the current copy/download fallback, but make direct local save the primary path during development.
 - Validate duplicate file names and invalid Markdown before writing.
 - Refresh or update the in-app library after saving so the new palette can be previewed without manual steps when practical.
@@ -18,15 +18,15 @@ Goal: turn the Palette Extractor from a temporary helper into the main ingestion
 
 Acceptance:
 
-- User can upload a Xiaohongshu color card, adjust names/HEX/roles, save it into `palettes/`, and see it as a palette-derived theme.
+- User can upload a Xiaohongshu color card, adjust names/HEX/roles, save it into `assets/colors/`, and see it as a palette-derived theme.
 - Saved files follow the existing palette Markdown schema.
 - Invalid or duplicate saves show a clear recoverable message.
 
-## Sprint 2: Compare Themes And Palettes Side By Side
+## Sprint 2: Compare Designs And Color-Derived Themes Side By Side
 
 Goal: help choose a visual direction before vibe coding.
 
-- Allow selecting 2-4 themes/palettes for comparison.
+- Allow selecting 2-4 designs or color-derived themes for comparison.
 - Show the same preview scene across all selected items.
 - Support at least Dashboard, Landing, Mobile, Components, and Color Card comparison.
 - Keep controls compact so comparison remains readable on desktop.

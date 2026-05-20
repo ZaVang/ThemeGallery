@@ -1,18 +1,27 @@
 # ThemeGallery
 
-ThemeGallery is a local theme gallery and preview workbench for design-system Markdown files.
+ThemeGallery is a local visual asset gallery and preview workbench for design-system Markdown files.
 
-It collects complete theme specs from `themes/` and lightweight color palettes from `palettes/`, then turns them into previewable UI themes. The goal is to make visual direction choices by seeing realistic product surfaces, not by reading token files in isolation.
+It collects complete design specs from `assets/designs/`, color palettes from `assets/colors/`, and smaller inspiration atoms from the other `assets/*` folders. Designs and colors are turned into previewable UI themes. The goal is to make visual direction choices by seeing realistic product surfaces, not by reading token files in isolation.
 
 ## Project Status
 
-The first local workbench is implemented. It loads Markdown sources from `themes/` and `palettes/`, normalizes them into previewable themes, and renders Dashboard, Landing, Mobile, and Components previews.
+The first local workbench is implemented. It loads Markdown sources from `assets/designs/` and `assets/colors/`, normalizes them into previewable themes, and renders Dashboard, Landing, Mobile, and Components previews.
 
 ## Repository Structure
 
 ```text
-themes/                     Full theme Markdown specs
-palettes/                   Lightweight palette Markdown specs
+assets/designs/             Full design Markdown specs
+assets/colors/              Lightweight color palette Markdown specs
+assets/typography/          Typography inspiration atoms
+assets/materials/           Material inspiration atoms
+assets/radius/              Radius inspiration atoms
+assets/lighting/            Lighting inspiration atoms
+assets/layouts/             Layout inspiration atoms
+assets/text/                Text and microcopy inspiration atoms
+assets/borders/             Border inspiration atoms
+assets/shapes/              Shape inspiration atoms
+assets/combinations/        Multi-dimensional inspiration combinations
 docs/superpowers/specs/     Product and technical design specs
 docs/superpowers/plans/     Implementation plans
 src/                        React workbench, parser, normalizer, and previews
@@ -31,7 +40,7 @@ Palette files are not expected to contain full design-system tokens. They should
 
 ## Theme Files
 
-Full themes live in `themes/*.md` and should use frontmatter for structured tokens:
+Full designs live in `assets/designs/*.md` and should use frontmatter for structured tokens:
 
 ```md
 ---
@@ -51,9 +60,9 @@ typography:
 Design notes go here.
 ```
 
-## Palette Files
+## Color Files
 
-Palettes live in `palettes/*.md` and can stay lightweight:
+Color palettes live in `assets/colors/*.md` and can stay lightweight:
 
 ```md
 ---

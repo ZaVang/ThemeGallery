@@ -1,3 +1,99 @@
+---
+name: LuxCart
+source: designmd.ai
+mood: Refined, minimal, white-glove shopping experience.
+tags:
+  - luxury
+  - ecommerce
+  - editorial
+colors:
+  background: "#FFFBEB"
+  on-background: "#1C1917"
+  surface: "#FFFFFF"
+  on-surface: "#1C1917"
+  on-surface-variant: "#57534E"
+  surface-container: "#FAFAF9"
+  surface-container-high: "#F5F5F4"
+  outline: "#D4D4D8"
+  outline-variant: "#E7E5E4"
+  primary: "#1C1917"
+  on-primary: "#FFFBEB"
+  primary-container: "#292524"
+  on-primary-container: "#FFFBEB"
+  secondary: "#FFFBEB"
+  on-secondary: "#1C1917"
+  secondary-container: "#F5F5F4"
+  on-secondary-container: "#1C1917"
+  tertiary: "#B8860B"
+  on-tertiary: "#FFFFFF"
+  error: "#991B1B"
+  on-error: "#FFFFFF"
+  success: "#166534"
+  warning: "#CA8A04"
+  info: "#1E40AF"
+  neutral: "#D4D4D8"
+typography:
+  display:
+    fontFamily: Cormorant Garamond
+    fontSize: 48px
+    fontWeight: "300"
+    lineHeight: 52px
+    letterSpacing: 0.02em
+  headline:
+    fontFamily: Cormorant Garamond
+    fontSize: 36px
+    fontWeight: "400"
+    lineHeight: 43px
+    letterSpacing: 0.01em
+  body:
+    fontFamily: Raleway
+    fontSize: 16px
+    fontWeight: "400"
+    lineHeight: 27px
+    letterSpacing: 0.02em
+  caption:
+    fontFamily: Raleway
+    fontSize: 12px
+    fontWeight: "500"
+    lineHeight: 17px
+    letterSpacing: 0.04em
+rounded:
+  none: 0px
+  sm: 2px
+  md: 4px
+  lg: 6px
+  xl: 8px
+  full: 9999px
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 12px
+  lg: 24px
+  xl: 36px
+  2xl: 48px
+  3xl: 72px
+  4xl: 96px
+  5xl: 144px
+components:
+  button:
+    background: "{colors.primary}"
+    foreground: "{colors.on-primary}"
+    radius: "{rounded.sm}"
+    padding: 12px 16px
+    font: "{typography.caption}"
+  card:
+    background: "{colors.surface}"
+    foreground: "{colors.on-surface}"
+    border: 1px solid #F5F5F4
+    radius: "{rounded.md}"
+    padding: 24px
+  input:
+    background: "{colors.surface}"
+    foreground: "{colors.on-surface}"
+    border: 1px solid #E7E5E4
+    radius: "{rounded.sm}"
+---
+
 # LuxCart
 
 Refined, minimal, white-glove shopping experience.

@@ -7,7 +7,7 @@ function makeTheme(): NormalizedTheme {
   return {
     id: 'role-order',
     kind: 'palette-derived',
-    filePath: 'palettes/role-order.md',
+    filePath: 'assets/colors/role-order.md',
     name: 'Role Order',
     tags: [],
     ...baseFoundation,
@@ -28,7 +28,7 @@ function makeFullTheme(): NormalizedTheme {
   return {
     id: 'apple-like',
     kind: 'theme',
-    filePath: 'themes/apple-like.md',
+    filePath: 'assets/designs/apple-like.md',
     name: 'Apple Like',
     tags: [],
     ...baseFoundation,

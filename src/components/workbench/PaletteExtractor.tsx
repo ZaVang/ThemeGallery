@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { colorAssetPath } from '../../data/assetPaths';
 import { extractPaletteFromImageFile } from '../../palette/imagePaletteExtraction';
 import {
   createPaletteFileName,
@@ -69,7 +70,7 @@ export function PaletteExtractor({
     () =>
       normalizeTheme({
         sourceKind: 'palette',
-        filePath: 'palettes/imported-preview.md',
+        filePath: 'assets/colors/imported-preview.md',
         id: 'palette-extractor-preview',
         name: name.trim() || 'Imported Palette',
         tags: ['imported', 'palette', ...selectedScenarioTags],
@@ -177,7 +178,7 @@ export function PaletteExtractor({
     link.download = createPaletteFileName(name);
     link.click();
     URL.revokeObjectURL(url);
-    setActionStatus(`Downloaded ${link.download}. Save it into palettes/.`);
+    setActionStatus(`Downloaded ${link.download}. Save it into assets/colors/.`);
   }
 
   async function saveToLibrary() {
@@ -188,7 +189,7 @@ export function PaletteExtractor({
 
     const nextFileName = createPaletteFileName(name);
     setIsSaving(true);
-    setActionStatus(`Saving to palettes/${nextFileName}...`);
+    setActionStatus(`Saving to ${colorAssetPath(nextFileName)}...`);
     try {
       const result = await savePalette({ fileName: nextFileName, markdown });
       setActionStatus(`Saved to ${result.filePath}. Reloading library...`);
@@ -345,10 +346,10 @@ export function PaletteExtractor({
         </label>
         <div className="extractor-actions">
           <button className="primary-action" type="button" disabled={isSaving} onClick={() => void saveToLibrary()}>
-            {isSaving ? 'Saving...' : 'Save to palettes/'}
+            {isSaving ? 'Saving...' : 'Save to assets/colors/'}
           </button>
         </div>
-        <p className="extractor-status">Primary save target: palettes/{createPaletteFileName(name)}</p>
+        <p className="extractor-status">Primary save target: {colorAssetPath(createPaletteFileName(name))}</p>
         <div className="extractor-actions">
           <button className="secondary-action" type="button" onClick={() => void copyMarkdown()}>
             Copy Markdown

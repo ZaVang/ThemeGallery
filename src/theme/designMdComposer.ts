@@ -120,7 +120,7 @@ export function composeDesignMarkdown({
   const themeById = new Map(themes.map((theme) => [theme.id, theme]));
 
   if (themes.length === 0) {
-    return `# ${title}\n\nNo theme sources are available yet. Add Markdown files under themes/ to compose a design.md draft.`;
+    return `# ${title}\n\nNo design sources are available yet. Add Markdown files under assets/designs/ to compose a design.md draft.`;
   }
 
   const sectionLines = designMdSectionConfigs.flatMap((section) => {

@@ -5,8 +5,18 @@
 ├── docs/
 │   ├── plans/                         Sprint contract, history, and pitfalls
 │   └── superpowers/                   Original design spec and implementation plan
-├── palettes/                          Lightweight palette Markdown sources
-├── themes/                            Full theme Markdown sources
+├── assets/
+│   ├── designs/                       Full design Markdown sources
+│   ├── colors/                        Lightweight color palette Markdown sources
+│   ├── typography/                    Typography inspiration atoms
+│   ├── materials/                     Material inspiration atoms
+│   ├── radius/                        Radius inspiration atoms
+│   ├── lighting/                      Lighting inspiration atoms
+│   ├── layouts/                       Layout inspiration atoms
+│   ├── text/                          Text and microcopy inspiration atoms
+│   ├── borders/                       Border inspiration atoms
+│   ├── shapes/                        Shape inspiration atoms
+│   └── combinations/                  Multi-dimensional inspiration combinations
 ├── src/
 │   ├── components/
 │   │   ├── previews/                  Dashboard, Landing, Mobile, Components scenes

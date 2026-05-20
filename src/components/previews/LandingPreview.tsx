@@ -16,22 +16,22 @@ export function LandingPreview() {
         <div className="product-panel" aria-label="Product preview">
           <div className="product-panel__bar" />
           <div className="product-panel__body">
-            <span />
-            <span />
-            <span />
+            <span className="is-secondary" />
+            <span className="is-tertiary" />
+            <span className="is-neutral" />
           </div>
         </div>
       </section>
       <section className="metric-grid">
-        <div className="preview-card">
+        <div className="preview-card is-primary">
           <span>Conversion</span>
           <strong>14.8%</strong>
         </div>
-        <div className="preview-card">
+        <div className="preview-card is-tertiary">
           <span>Activation</span>
           <strong>71%</strong>
         </div>
-        <div className="preview-card">
+        <div className="preview-card is-neutral">
           <span>Retention</span>
           <strong>42d</strong>
         </div>
@@ -39,4 +39,3 @@ export function LandingPreview() {
     </div>
   );
 }
-

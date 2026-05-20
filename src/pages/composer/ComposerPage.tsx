@@ -19,6 +19,8 @@ import {
   getDesignMdCandidateThemes,
   type DesignMdSectionId,
 } from '../../theme/designMdComposer';
+import { composeThemeMarkdown, createDesignFileName } from '../../theme/composedThemeMarkdown';
+import { saveThemeMarkdown } from '../../theme/saveTheme';
 import type { NormalizedTheme } from '../../types/theme';
 
 const composerDimensions: InspirationDimension[] = ['color', 'typography', 'radius', 'material', 'lighting', 'layout'];
@@ -26,10 +28,11 @@ const composedDesignFileName = 'composed-design-direction.md';
 
 interface ComposerPageProps {
   onApplyAppearancePatch: (patch: AppAppearancePatch) => void;
+  saveTheme?: typeof saveThemeMarkdown;
   themes?: NormalizedTheme[];
 }
 
-export function ComposerPage({ onApplyAppearancePatch, themes }: ComposerPageProps) {
+export function ComposerPage({ onApplyAppearancePatch, saveTheme = saveThemeMarkdown, themes }: ComposerPageProps) {
   const loadedThemes = useMemo(() => themes ?? loadThemeLibrary(), [themes]);
   const designMdThemes = useMemo(() => getDesignMdCandidateThemes(loadedThemes), [loadedThemes]);
   const defaultDesignMdSelections = useMemo(() => createDefaultDesignMdSelections(designMdThemes), [designMdThemes]);
@@ -52,6 +55,8 @@ export function ComposerPage({ onApplyAppearancePatch, themes }: ComposerPagePro
     [designMdSelections, designMdThemes],
   );
   const [designMdActionStatus, setDesignMdActionStatus] = useState('');
+  const [themeName, setThemeName] = useState('Composed Design Direction');
+  const [isSavingTheme, setIsSavingTheme] = useState(false);
   const [selectedAtomIds, setSelectedAtomIds] = useState<Partial<Record<InspirationDimension, string>>>({});
   const selectedAtoms = useMemo(
     () =>
@@ -70,6 +75,16 @@ export function ComposerPage({ onApplyAppearancePatch, themes }: ComposerPagePro
   const styleMixVars = useMemo(
     () => appAppearanceToCssVars(resolveAppAppearance(defaultAppAppearancePreset, styleMixPatch)),
     [styleMixPatch],
+  );
+  const composedThemeMarkdown = useMemo(
+    () =>
+      composeThemeMarkdown({
+        name: themeName,
+        themes: designMdThemes,
+        selections: designMdSelections,
+        selectedAtoms,
+      }),
+    [designMdSelections, designMdThemes, selectedAtoms, themeName],
   );
 
   function selectAtom(dimension: InspirationDimension, atomId: string) {
@@ -113,6 +128,26 @@ export function ComposerPage({ onApplyAppearancePatch, themes }: ComposerPagePro
     link.click();
     URL.revokeObjectURL(url);
     setDesignMdActionStatus(`Downloaded ${composedDesignFileName}.`);
+  }
+
+  async function saveComposedTheme() {
+    if (!themeName.trim()) {
+      setDesignMdActionStatus('Theme name is required before saving.');
+      return;
+    }
+
+    const fileName = createDesignFileName(themeName);
+    setIsSavingTheme(true);
+    setDesignMdActionStatus(`Saving to assets/designs/${fileName}...`);
+    try {
+      const result = await saveTheme({ fileName, markdown: composedThemeMarkdown });
+      setDesignMdActionStatus(`Saved to ${result.filePath}. Reloading library...`);
+      window.setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setDesignMdActionStatus(error instanceof Error ? error.message : 'Unable to save theme Markdown.');
+    } finally {
+      setIsSavingTheme(false);
+    }
   }
 
   return (
@@ -171,6 +206,19 @@ export function ComposerPage({ onApplyAppearancePatch, themes }: ComposerPagePro
         </div>
 
         <aside className="composer-preview" style={styleMixVars}>
+          <label className="search-field">
+            <span>Theme name</span>
+            <input
+              aria-label="Theme name"
+              value={themeName}
+              onChange={(event) => setThemeName(event.target.value)}
+            />
+          </label>
+          <div className="design-md-actions">
+            <button className="primary-action" type="button" disabled={isSavingTheme} onClick={() => void saveComposedTheme()}>
+              {isSavingTheme ? 'Saving...' : 'Save as theme'}
+            </button>
+          </div>
           <label className="design-md-output">
             <span>Composed design.md</span>
             <textarea aria-label="Composed design.md" readOnly value={composedDesignMarkdown} />

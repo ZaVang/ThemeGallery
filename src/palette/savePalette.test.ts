@@ -7,7 +7,7 @@ describe('savePaletteMarkdown', () => {
       json: () =>
         Promise.resolve({
           fileName: 'coffee-foam.md',
-          filePath: 'palettes/coffee-foam.md',
+          filePath: 'assets/colors/coffee-foam.md',
         }),
     });
 
@@ -15,7 +15,7 @@ describe('savePaletteMarkdown', () => {
       savePaletteMarkdown({ fileName: 'coffee-foam.md', markdown: '---\nname: Coffee Foam\n---\n' }, fetcher),
     ).resolves.toEqual({
       fileName: 'coffee-foam.md',
-      filePath: 'palettes/coffee-foam.md',
+      filePath: 'assets/colors/coffee-foam.md',
     });
 
     expect(fetcher).toHaveBeenCalledWith('/api/palettes', {
@@ -30,12 +30,12 @@ describe('savePaletteMarkdown', () => {
       ok: false,
       json: () =>
         Promise.resolve({
-          message: 'palettes/coffee-foam.md already exists. Pick another palette name before saving.',
+          message: 'assets/colors/coffee-foam.md already exists. Pick another color asset name before saving.',
         }),
     });
 
     await expect(savePaletteMarkdown({ fileName: 'coffee-foam.md', markdown: 'bad' }, fetcher)).rejects.toThrow(
-      'palettes/coffee-foam.md already exists. Pick another palette name before saving.',
+      'assets/colors/coffee-foam.md already exists. Pick another color asset name before saving.',
     );
   });
 });

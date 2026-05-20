@@ -1,5 +1,4 @@
 import type { ScenarioTagFilter } from '../../theme/scenarioTags';
-import type { ThemeSourceFilter } from '../../types/sourceLibrary';
 import type { NormalizedTheme } from '../../types/theme';
 
 function matchesThemeQuery(theme: NormalizedTheme, query: string): boolean {
@@ -13,14 +12,12 @@ function matchesThemeQuery(theme: NormalizedTheme, query: string): boolean {
 
 export function filterThemeSources(
   themes: NormalizedTheme[],
-  filter: ThemeSourceFilter,
   scenarioFilter: ScenarioTagFilter,
   query: string,
 ): NormalizedTheme[] {
   return themes.filter((theme) => {
-    const matchesType = filter === 'all' || theme.kind === filter;
     const matchesScenario = scenarioFilter === 'all' || theme.tags.includes(scenarioFilter);
 
-    return matchesType && matchesScenario && matchesThemeQuery(theme, query);
+    return matchesScenario && matchesThemeQuery(theme, query);
   });
 }

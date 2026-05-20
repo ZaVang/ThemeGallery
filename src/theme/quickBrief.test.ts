@@ -5,7 +5,7 @@ import { createQuickBrief } from './quickBrief';
 const theme: NormalizedTheme = {
   id: 'avocado',
   kind: 'palette-derived',
-  filePath: 'palettes/avocado.md',
+  filePath: 'assets/colors/avocado.md',
   name: 'Avocado Morning',
   tags: ['food/drink', 'fresh'],
   mood: '清新治愈',

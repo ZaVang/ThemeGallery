@@ -5,7 +5,7 @@ describe('normalizeTheme', () => {
   it('normalizes full themes and resolves component references', () => {
     const source: ParsedThemeSource = {
       sourceKind: 'theme',
-      filePath: 'themes/example.md',
+      filePath: 'assets/designs/example.md',
       id: 'example',
       name: 'Example',
       tags: ['dark'],

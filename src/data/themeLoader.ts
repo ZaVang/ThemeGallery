@@ -4,13 +4,13 @@ import { parseThemeSource } from './parseTheme';
 
 type ModuleMap = Record<string, string>;
 
-const themeModules = import.meta.glob('../../themes/*.md', {
+const designModules = import.meta.glob('../../assets/designs/*.md', {
   eager: true,
   import: 'default',
   query: '?raw',
 }) as ModuleMap;
 
-const paletteModules = import.meta.glob('../../palettes/*.md', {
+const colorModules = import.meta.glob('../../assets/colors/*.md', {
   eager: true,
   import: 'default',
   query: '?raw',
@@ -27,11 +27,10 @@ function loadModules(modules: ModuleMap, sourceKind: 'theme' | 'palette'): Norma
 }
 
 export function loadThemeLibrary(
-  themes: ModuleMap = themeModules,
-  palettes: ModuleMap = paletteModules,
+  themes: ModuleMap = designModules,
+  palettes: ModuleMap = colorModules,
 ): NormalizedTheme[] {
   return [...loadModules(themes, 'theme'), ...loadModules(palettes, 'palette')].sort((a, b) =>
     a.name.localeCompare(b.name),
   );
 }
-

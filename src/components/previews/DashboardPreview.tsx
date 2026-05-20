@@ -17,30 +17,34 @@ export function DashboardPreview() {
           <button className="preview-button" type="button">Create report</button>
         </header>
         <section className="metric-grid">
-          <div className="preview-card">
+          <div className="preview-card is-primary">
             <span>Revenue</span>
             <strong>$48.2k</strong>
           </div>
-          <div className="preview-card">
+          <div className="preview-card is-secondary">
             <span>Pipeline</span>
             <strong>128</strong>
           </div>
-          <div className="preview-card">
+          <div className="preview-card is-tertiary">
             <span>Velocity</span>
             <strong>92%</strong>
           </div>
         </section>
         <section className="preview-card chart-card" aria-label="Activity chart">
-          <span className="chart-bar chart-bar-a" />
-          <span className="chart-bar chart-bar-b" />
-          <span className="chart-bar chart-bar-c" />
-          <span className="chart-bar chart-bar-d" />
+          <span className="chart-bar chart-bar-a chart-bar-primary" />
+          <span className="chart-bar chart-bar-b chart-bar-secondary" />
+          <span className="chart-bar chart-bar-c chart-bar-tertiary" />
+          <span className="chart-bar chart-bar-d chart-bar-neutral" />
         </section>
         <section className="preview-table">
-          {['Design review', 'Launch checklist', 'Customer research'].map((item) => (
+          {[
+            ['Design review', 'Healthy', 'success'],
+            ['Launch checklist', 'Watch', 'warning'],
+            ['Customer research', 'Insight', 'info'],
+          ].map(([item, status, variant]) => (
             <div className="preview-row" key={item}>
               <span>{item}</span>
-              <span className="preview-badge">On track</span>
+              <span className={`preview-badge ${variant}`}>{status}</span>
             </div>
           ))}
         </section>
@@ -48,4 +52,3 @@ export function DashboardPreview() {
     </div>
   );
 }
-

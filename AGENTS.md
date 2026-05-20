@@ -6,8 +6,9 @@ This file guides future coding agents working in this repository.
 
 ThemeGallery is a local React/Vite theme workbench. It reads Markdown design assets from:
 
-- `themes/*.md`: full theme specs with frontmatter tokens and Markdown guidance.
-- `palettes/*.md`: lightweight color palettes, usually collected references, that should be derived into complete preview themes at runtime.
+- `assets/designs/*.md`: full design specs with frontmatter tokens and Markdown guidance.
+- `assets/colors/*.md`: lightweight color palettes, usually collected references, that should be derived into complete preview themes at runtime.
+- `assets/typography/`, `assets/materials/`, `assets/radius/`, `assets/lighting/`, `assets/layouts/`, `assets/text/`, `assets/borders/`, `assets/shapes/`, and `assets/combinations/`: inspiration atoms and multi-dimensional combinations for browsing and future composition.
 
 The product goal is to let the user click a theme or palette and see realistic UI previews before choosing a visual direction.
 
@@ -31,7 +32,7 @@ Reference docs:
 - If isolation is needed, use `.worktrees/`; it is intentionally ignored.
 - The current ignored local-only directories are `.superpowers/` and `.worktrees/`.
 - Do not commit `node_modules/`, build output, or local companion/mockup artifacts.
-- `themes/` and `palettes/` are project source assets, not scratch files.
+- `assets/` is the project source asset root, not a scratch folder.
 
 ## Product Scope
 
@@ -63,10 +64,10 @@ Workbench layout:
 - Read Markdown as raw text using Vite `import.meta.glob`.
 - Parse frontmatter with `gray-matter`.
 - Keep Markdown body for inspector display.
-- Ignore `themes/tailwind.css` as a theme input; treat it as an export artifact.
+- Ignore `assets/designs/tailwind.css` as a theme input; treat it as an export artifact.
 - Normalize all inputs into one `NormalizedTheme` model.
-- Full theme files mostly preserve provided tokens.
-- Palette files become `palette-derived` themes at runtime.
+- Full design files mostly preserve provided tokens.
+- Color palette files become `palette-derived` themes at runtime.
 - Palette-derived themes use a neutral `Base UI Foundation` for typography, spacing, rounded tokens, and components.
 - Palette roles map roughly as:
   - `background` -> `background`, `surface-dim`

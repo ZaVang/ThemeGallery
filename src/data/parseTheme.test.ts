@@ -4,7 +4,7 @@ describe('parseThemeSource', () => {
   it('parses full theme markdown frontmatter and body', () => {
     const parsed = parseThemeSource(
       `---\nname: Test Theme\ntags: [calm, product]\ncolors:\n  primary: "#ABC"\n---\n\n## Notes\nUseful.`,
-      'themes/test-theme.md',
+      'assets/designs/test-theme.md',
       'theme',
     );
 
@@ -18,7 +18,7 @@ describe('parseThemeSource', () => {
   it('parses palette markdown as color arrays', () => {
     const parsed = parseThemeSource(
       `---\nname: Palette\ncolors:\n  - name: Ink\n    hex: "#111111"\n    role: primary\n---\nBody`,
-      'palettes/palette.md',
+      'assets/colors/palette.md',
       'palette',
     );
 
@@ -30,7 +30,7 @@ describe('parseThemeSource', () => {
   it('keeps the last duplicate YAML key and records a warning', () => {
     const parsed = parseThemeSource(
       `---\nname: Duplicate\ncolors:\n  primary: "#111111"\n  primary: "#222222"\n---\nBody`,
-      'themes/duplicate.md',
+      'assets/designs/duplicate.md',
       'theme',
     );
 
@@ -41,7 +41,7 @@ describe('parseThemeSource', () => {
   it('parses mixed token strings that contain quotes inside a scalar', () => {
     const parsed = parseThemeSource(
       `---\nname: Mixed String\ncomponents:\n  hero:\n    padding: "{spacing.hero-height}" 0\n---\nBody`,
-      'themes/mixed-string.md',
+      'assets/designs/mixed-string.md',
       'theme',
     );
 
@@ -52,7 +52,7 @@ describe('parseThemeSource', () => {
   it('does not treat repeated keys in separate YAML list items as duplicates', () => {
     const parsed = parseThemeSource(
       `---\nname: List\ncolors:\n  - name: A\n    hex: "#111111"\n    role: primary\n  - name: B\n    hex: "#222222"\n    role: secondary\ngradients:\n  - from: "#111111"\n    to: "#222222"\n  - from: "#222222"\n    to: "#333333"\n---\nBody`,
-      'palettes/list.md',
+      'assets/colors/list.md',
       'palette',
     );
 

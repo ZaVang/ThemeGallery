@@ -8,6 +8,11 @@ import {
   savePaletteMarkdownToLibrary,
   type LocalPaletteSaveInput,
 } from './src/palette/localPaletteSave';
+import {
+  ThemeSaveError,
+  saveThemeMarkdownToLibrary,
+  type LocalThemeSaveInput,
+} from './src/theme/localThemeSave';
 
 function readJsonBody(request: NodeJS.ReadableStream): Promise<unknown> {
   return new Promise((resolve, reject) => {
@@ -33,9 +38,9 @@ function writeJson(response: ServerResponse, statusCode: number, body: Record<st
   response.end(JSON.stringify(body));
 }
 
-function localPaletteSavePlugin(): Plugin {
+function localAssetSavePlugin(): Plugin {
   return {
-    name: 'theme-gallery-local-palette-save',
+    name: 'theme-gallery-local-asset-save',
     configureServer(server) {
       server.middlewares.use('/api/palettes', async (request, response) => {
         if (request.method !== 'POST') {
@@ -56,12 +61,31 @@ function localPaletteSavePlugin(): Plugin {
           writeJson(response, statusCode, { message });
         }
       });
+      server.middlewares.use('/api/themes', async (request, response) => {
+        if (request.method !== 'POST') {
+          writeJson(response, 405, { message: 'Use POST to save a theme.' });
+          return;
+        }
+
+        try {
+          const body = await readJsonBody(request);
+          const result = await saveThemeMarkdownToLibrary(body as LocalThemeSaveInput, server.config.root);
+          writeJson(response, 201, {
+            fileName: result.fileName,
+            filePath: result.filePath,
+          });
+        } catch (error) {
+          const statusCode = error instanceof ThemeSaveError ? error.statusCode : 500;
+          const message = error instanceof Error ? error.message : 'Unable to save theme Markdown.';
+          writeJson(response, statusCode, { message });
+        }
+      });
     },
   };
 }
 
 export default defineConfig({
-  plugins: [react(), localPaletteSavePlugin()],
+  plugins: [react(), localAssetSavePlugin()],
   test: {
     environment: 'jsdom',
     globals: true,

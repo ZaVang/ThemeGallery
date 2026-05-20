@@ -11,46 +11,35 @@ describe('App', () => {
 
   it('loads existing local markdown sources', () => {
     render(<App />);
-    expect(screen.getByRole('button', { name: 'Select Linear' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Select Soft Mauve' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select LuxCart' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Select Soft Mauve' })).not.toBeInTheDocument();
   });
 
   it('filters the library by search text', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.type(screen.getByRole('searchbox', { name: /search/i }), 'linear');
+    await user.type(screen.getByRole('searchbox', { name: /search/i }), 'lux');
 
-    expect(screen.getByRole('button', { name: 'Select Linear' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Select Apple' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select LuxCart' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Select Soft Mauve' })).not.toBeInTheDocument();
   });
 
   it('filters the library by usage scenario tag', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.selectOptions(screen.getByLabelText('Scenario tag filter'), 'minimal');
+    await user.selectOptions(screen.getByLabelText('Scenario tag filter'), 'luxury');
 
-    expect(screen.getByRole('button', { name: 'Select Luna Ocean' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Select Linear' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Select LuxCart' })).toBeInTheDocument();
   });
 
-  it('compares two selected visual directions and can remove one', async () => {
+  it('applies a selected theme direction to the app shell', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /Add Linear to compare/ }));
-    await user.click(screen.getByRole('button', { name: /Add Soft Mauve to compare/ }));
+    await user.click(screen.getByRole('button', { name: 'Apply LuxCart to app appearance' }));
 
-    expect(screen.getByRole('heading', { name: 'Compare 2 directions' })).toBeInTheDocument();
-
-    await user.click(screen.getByRole('tab', { name: 'Color Card' }));
-
-    expect(screen.getByLabelText('Linear color card')).toBeInTheDocument();
-    expect(screen.getByLabelText('Soft Mauve color card')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: 'Remove Linear from comparison' }));
-
-    expect(screen.queryByRole('heading', { name: 'Compare 2 directions' })).not.toBeInTheDocument();
+    expect(screen.getByTestId('app-root')).toHaveStyle({ '--app-accent': '#b8860b' });
   });
 });

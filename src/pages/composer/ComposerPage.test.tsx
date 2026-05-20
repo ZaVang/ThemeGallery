@@ -7,7 +7,7 @@ function makeTheme(id: string, name: string, markdownBody: string): NormalizedTh
   return {
     id,
     kind: 'theme',
-    filePath: `themes/${id}.md`,
+    filePath: `assets/designs/${id}.md`,
     name,
     tags: [],
     colors: {
@@ -145,5 +145,42 @@ describe('ComposerPage', () => {
 
     click.mockRestore();
     vi.unstubAllGlobals();
+  });
+
+  it('saves the composed direction as a full theme asset', async () => {
+    const user = userEvent.setup();
+    const onApplyAppearancePatch = vi.fn();
+    const saveTheme = vi.fn().mockResolvedValue({
+      fileName: 'luxcart-linear-mix.md',
+      filePath: 'assets/designs/luxcart-linear-mix.md',
+    });
+    const luxCart = makeTheme(
+      'luxcart',
+      'LuxCart',
+      [
+        '## Overview',
+        'Luxury shopping system.',
+        '',
+        '## Colors',
+        '- **Primary** (#1C1917): Charcoal',
+        '',
+        '## Typography',
+        '- **Display**: Cormorant Garamond 48px',
+      ].join('\n'),
+    );
+
+    render(<ComposerPage themes={[luxCart]} onApplyAppearancePatch={onApplyAppearancePatch} saveTheme={saveTheme} />);
+
+    await user.clear(screen.getByLabelText('Theme name'));
+    await user.type(screen.getByLabelText('Theme name'), 'LuxCart Linear Mix');
+    await user.click(screen.getByRole('button', { name: 'Save as theme' }));
+
+    expect(saveTheme).toHaveBeenCalledWith(expect.objectContaining({
+      fileName: 'luxcart-linear-mix.md',
+      markdown: expect.stringContaining('name: "LuxCart Linear Mix"'),
+    }));
+    expect(saveTheme.mock.calls[0][0].markdown).toContain('colors:');
+    expect(saveTheme.mock.calls[0][0].markdown).toContain('typography:');
+    expect(await screen.findByText('Saved to assets/designs/luxcart-linear-mix.md. Reloading library...')).toBeInTheDocument();
   });
 });

@@ -2,6 +2,7 @@ import { constants } from 'node:fs';
 import { access, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
+import { colorAssetsDir, colorAssetPath } from '../data/assetPaths';
 
 export interface LocalPaletteSaveInput {
   fileName: unknown;
@@ -70,22 +71,22 @@ function validatePaletteMarkdown(markdown: string): void {
   }
 }
 
-function resolvePalettePath(rootDir: string, fileName: string): { palettesDir: string; targetPath: string } {
-  const palettesDir = path.resolve(rootDir, 'palettes');
-  const targetPath = path.resolve(palettesDir, fileName);
-  const relative = path.relative(palettesDir, targetPath);
+function resolveColorAssetPath(rootDir: string, fileName: string): { colorsDir: string; targetPath: string } {
+  const colorsDir = path.resolve(rootDir, colorAssetsDir);
+  const targetPath = path.resolve(colorsDir, fileName);
+  const relative = path.relative(colorsDir, targetPath);
 
   if (relative.startsWith('..') || path.isAbsolute(relative)) {
-    throw new PaletteSaveError(400, 'Palette file must be saved inside palettes/.');
+    throw new PaletteSaveError(400, 'Color asset file must be saved inside assets/colors/.');
   }
 
-  return { palettesDir, targetPath };
+  return { colorsDir, targetPath };
 }
 
 async function assertFileDoesNotExist(filePath: string, displayPath: string): Promise<void> {
   try {
     await access(filePath, constants.F_OK);
-    throw new PaletteSaveError(409, `${displayPath} already exists. Pick another palette name before saving.`);
+    throw new PaletteSaveError(409, `${displayPath} already exists. Pick another color asset name before saving.`);
   } catch (error) {
     if (error instanceof PaletteSaveError) {
       throw error;
@@ -109,16 +110,16 @@ export async function savePaletteMarkdownToLibrary(
   validateFileName(fileName);
   validatePaletteMarkdown(markdown);
 
-  const filePath = `palettes/${fileName}`;
-  const { palettesDir, targetPath } = resolvePalettePath(rootDir, fileName);
-  await mkdir(palettesDir, { recursive: true });
+  const filePath = colorAssetPath(fileName);
+  const { colorsDir, targetPath } = resolveColorAssetPath(rootDir, fileName);
+  await mkdir(colorsDir, { recursive: true });
   await assertFileDoesNotExist(targetPath, filePath);
 
   try {
     await writeFile(targetPath, `${markdown}\n`, { encoding: 'utf8', flag: 'wx' });
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error && error.code === 'EEXIST') {
-      throw new PaletteSaveError(409, `${filePath} already exists. Pick another palette name before saving.`);
+      throw new PaletteSaveError(409, `${filePath} already exists. Pick another color asset name before saving.`);
     }
     throw error;
   }

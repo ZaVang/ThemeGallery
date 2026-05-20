@@ -3,7 +3,7 @@ import { derivePaletteTheme } from './derivePaletteTheme';
 
 const softMauve: ParsedThemeSource = {
   sourceKind: 'palette',
-  filePath: 'palettes/soft-mauve.md',
+  filePath: 'assets/colors/soft-mauve.md',
   id: 'soft-mauve',
   name: 'Soft Mauve',
   tags: ['soft', 'mauve'],

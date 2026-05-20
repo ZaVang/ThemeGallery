@@ -25,7 +25,7 @@ describe('PaletteExtractor', () => {
     expect(screen.getByDisplayValue(/name: Coffee Foam/)).toBeInTheDocument();
     expect(screen.getByDisplayValue(/name: Coffee/)).toBeInTheDocument();
     expect(screen.getByDisplayValue(/hex: "#B6885D"/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Save to palettes/' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save to assets/colors/' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Copy Markdown' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Download .md' })).toBeInTheDocument();
     expect(screen.getByText(/Primary save target:/)).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('PaletteExtractor', () => {
     const user = userEvent.setup();
     const savePalette = vi.fn().mockResolvedValue({
       fileName: 'coffee-foam.md',
-      filePath: 'palettes/coffee-foam.md',
+      filePath: 'assets/colors/coffee-foam.md',
     });
 
     render(
@@ -83,18 +83,18 @@ describe('PaletteExtractor', () => {
 
     await user.clear(screen.getByLabelText('Palette name'));
     await user.type(screen.getByLabelText('Palette name'), 'Coffee Foam');
-    await user.click(screen.getByRole('button', { name: 'Save to palettes/' }));
+    await user.click(screen.getByRole('button', { name: 'Save to assets/colors/' }));
 
     expect(savePalette).toHaveBeenCalledWith({
       fileName: 'coffee-foam.md',
       markdown: expect.stringContaining('name: Coffee Foam'),
     });
-    expect(await screen.findByText('Saved to palettes/coffee-foam.md. Reloading library...')).toBeInTheDocument();
+    expect(await screen.findByText('Saved to assets/colors/coffee-foam.md. Reloading library...')).toBeInTheDocument();
   });
 
   it('shows recoverable save errors', async () => {
     const user = userEvent.setup();
-    const savePalette = vi.fn().mockRejectedValue(new Error('palettes/coffee-foam.md already exists.'));
+    const savePalette = vi.fn().mockRejectedValue(new Error('assets/colors/coffee-foam.md already exists.'));
 
     render(
       <PaletteExtractor
@@ -106,8 +106,8 @@ describe('PaletteExtractor', () => {
 
     await user.clear(screen.getByLabelText('Palette name'));
     await user.type(screen.getByLabelText('Palette name'), 'Coffee Foam');
-    await user.click(screen.getByRole('button', { name: 'Save to palettes/' }));
+    await user.click(screen.getByRole('button', { name: 'Save to assets/colors/' }));
 
-    expect(await screen.findByText('palettes/coffee-foam.md already exists.')).toBeInTheDocument();
+    expect(await screen.findByText('assets/colors/coffee-foam.md already exists.')).toBeInTheDocument();
   });
 });

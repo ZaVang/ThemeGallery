@@ -6,7 +6,7 @@ import { ThemeInspector } from './ThemeInspector';
 const theme: NormalizedTheme = {
   id: 'soft-mauve',
   kind: 'palette-derived',
-  filePath: 'palettes/soft-mauve.md',
+  filePath: 'assets/colors/soft-mauve.md',
   name: 'Soft Mauve',
   tags: ['soft', 'mauve'],
   mood: '柔和雅致',

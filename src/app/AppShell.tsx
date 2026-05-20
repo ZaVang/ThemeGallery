@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ComposerPage } from '../pages/composer/ComposerPage';
+import { ImportAssetsPage } from '../pages/import-assets/ImportAssetsPage';
 import { InspirationsPage } from '../pages/inspirations/InspirationsPage';
 import { SettingsPage } from '../pages/settings/SettingsPage';
 import { ThemeWorkbenchPage } from '../pages/theme-workbench/ThemeWorkbenchPage';
@@ -35,7 +36,8 @@ export function AppShell() {
       style={appearanceVars}
     >
       <AppTopNav activePage={activePage} onPageChange={setActivePage} />
-      {activePage === 'themes' && <ThemeWorkbenchPage />}
+      {activePage === 'themes' && <ThemeWorkbenchPage onApplyAppearancePatch={setAppearancePatch} />}
+      {activePage === 'import' && <ImportAssetsPage />}
       {activePage === 'inspirations' && <InspirationsPage onApplyAppearancePatch={setAppearancePatch} />}
       {activePage === 'composer' && <ComposerPage onApplyAppearancePatch={setAppearancePatch} />}
       {activePage === 'settings' && (

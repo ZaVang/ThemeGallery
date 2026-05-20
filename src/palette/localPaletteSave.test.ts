@@ -27,31 +27,31 @@ describe('localPaletteSave', () => {
     });
   }
 
-  it('writes generated palette markdown into palettes', async () => {
+  it('writes generated palette markdown into assets/colors', async () => {
     const result = await savePaletteMarkdownToLibrary(
       { fileName: 'coffee-foam.md', markdown: validMarkdown() },
       rootDir,
     );
 
-    await expect(readFile(path.join(rootDir, 'palettes', 'coffee-foam.md'), 'utf8')).resolves.toContain(
+    await expect(readFile(path.join(rootDir, 'assets', 'colors', 'coffee-foam.md'), 'utf8')).resolves.toContain(
       'name: Coffee Foam',
     );
     expect(result).toEqual({
       fileName: 'coffee-foam.md',
-      filePath: 'palettes/coffee-foam.md',
-      absolutePath: path.join(rootDir, 'palettes', 'coffee-foam.md'),
+      filePath: 'assets/colors/coffee-foam.md',
+      absolutePath: path.join(rootDir, 'assets', 'colors', 'coffee-foam.md'),
     });
   });
 
   it('rejects duplicate palette file names', async () => {
-    await mkdir(path.join(rootDir, 'palettes'));
-    await writeFile(path.join(rootDir, 'palettes', 'coffee-foam.md'), validMarkdown(), 'utf8');
+    await mkdir(path.join(rootDir, 'assets', 'colors'), { recursive: true });
+    await writeFile(path.join(rootDir, 'assets', 'colors', 'coffee-foam.md'), validMarkdown(), 'utf8');
 
     await expect(
       savePaletteMarkdownToLibrary({ fileName: 'coffee-foam.md', markdown: validMarkdown() }, rootDir),
     ).rejects.toMatchObject({
       statusCode: 409,
-      message: 'palettes/coffee-foam.md already exists. Pick another palette name before saving.',
+      message: 'assets/colors/coffee-foam.md already exists. Pick another color asset name before saving.',
     });
   });
 

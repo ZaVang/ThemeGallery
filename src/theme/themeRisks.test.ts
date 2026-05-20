@@ -64,7 +64,7 @@ describe('themeRisks', () => {
   it('attaches risk summaries to normalized themes', () => {
     const source: ParsedThemeSource = {
       sourceKind: 'theme',
-      filePath: 'themes/low-contrast.md',
+      filePath: 'assets/designs/low-contrast.md',
       id: 'low-contrast',
       name: 'Low Contrast',
       tags: [],

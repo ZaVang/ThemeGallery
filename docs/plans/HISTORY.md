@@ -9,7 +9,7 @@
 
 ## 2026-05-20: Sprint 1 Save Palettes Into The Local Library
 
-- Added a Vite dev-server-only `POST /api/palettes` path that validates generated palette Markdown and writes it into `palettes/*.md`.
+- Added a Vite dev-server-only `POST /api/palettes` path that validates generated palette Markdown and writes it into `assets/colors/*.md`.
 - Made Palette Extractor's primary action save directly into the local library, with copy/download preserved as fallback actions.
 - Added duplicate filename and invalid Markdown handling with recoverable UI messages.
 - Verified save, reload, palette-derived preview visibility, duplicate handling, and desktop/mobile overflow with Playwright QA at `http://127.0.0.1:47822/`.

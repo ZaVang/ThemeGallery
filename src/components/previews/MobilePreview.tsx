@@ -13,14 +13,18 @@ export function MobilePreview() {
           <span>Deep work</span>
           <strong>3h 24m</strong>
         </section>
-        {['Design system audit', 'Palette review', 'Preview polish'].map((item) => (
+        {[
+          ['Design system audit', 'Done', 'success'],
+          ['Palette review', 'Watch', 'warning'],
+          ['Preview polish', 'Info', 'info'],
+        ].map(([item, status, variant]) => (
           <div className="phone-list-item" key={item}>
             <span>{item}</span>
-            <span className="preview-badge secondary">Done</span>
+            <span className={`preview-badge ${variant}`}>{status}</span>
           </div>
         ))}
         <nav className="phone-tabs">
-          <span>Home</span>
+          <span className="is-active">Home</span>
           <span>Insights</span>
           <span>Profile</span>
         </nav>
@@ -28,4 +32,3 @@ export function MobilePreview() {
     </div>
   );
 }
-

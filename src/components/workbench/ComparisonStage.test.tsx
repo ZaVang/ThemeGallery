@@ -10,7 +10,7 @@ function makeTheme(id: string, name: string, primary: string): NormalizedTheme {
   return {
     id,
     kind: 'theme',
-    filePath: `themes/${id}.md`,
+    filePath: `assets/designs/${id}.md`,
     name,
     tags: [],
     ...baseFoundation,
@@ -62,6 +62,6 @@ describe('ComparisonStage', () => {
     expect(screen.getByLabelText('Apple color card')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Remove Linear from comparison' }));
-    expect(onRemoveTheme).toHaveBeenCalledWith('themes/linear.md');
+    expect(onRemoveTheme).toHaveBeenCalledWith('assets/designs/linear.md');
   });
 });
