@@ -1,8 +1,4 @@
-import { useMemo, useState } from 'react';
-import { ComposerPage } from '../pages/composer/ComposerPage';
-import { ImportAssetsPage } from '../pages/import-assets/ImportAssetsPage';
-import { InspirationsPage } from '../pages/inspirations/InspirationsPage';
-import { SettingsPage } from '../pages/settings/SettingsPage';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { ThemeWorkbenchPage } from '../pages/theme-workbench/ThemeWorkbenchPage';
 import { appAppearancePresets, defaultAppAppearancePreset } from './appearance/appAppearance';
 import type { AppAppearancePatch } from './appearance/appAppearancePatch';
@@ -10,6 +6,30 @@ import { resolveAppAppearance } from './appearance/appAppearancePatch';
 import { appAppearanceToCssVars } from './appearance/appAppearanceCssVars';
 import { AppTopNav } from './AppTopNav';
 import type { AppPageId } from './appPages';
+
+const ImportAssetsPage = lazy(() =>
+  import('../pages/import-assets/ImportAssetsPage').then((module) => ({ default: module.ImportAssetsPage })),
+);
+const InspirationsPage = lazy(() =>
+  import('../pages/inspirations/InspirationsPage').then((module) => ({ default: module.InspirationsPage })),
+);
+const ComposerPage = lazy(() =>
+  import('../pages/composer/ComposerPage').then((module) => ({ default: module.ComposerPage })),
+);
+const SettingsPage = lazy(() =>
+  import('../pages/settings/SettingsPage').then((module) => ({ default: module.SettingsPage })),
+);
+
+function PageLoadingFallback() {
+  return (
+    <main className="app-page">
+      <section className="placeholder-panel" aria-label="Loading page">
+        <h2>Loading</h2>
+        <p>Preparing this workspace.</p>
+      </section>
+    </main>
+  );
+}
 
 export function AppShell() {
   const [activePage, setActivePage] = useState<AppPageId>('themes');
@@ -36,13 +56,15 @@ export function AppShell() {
       style={appearanceVars}
     >
       <AppTopNav activePage={activePage} onPageChange={setActivePage} />
-      {activePage === 'themes' && <ThemeWorkbenchPage onApplyAppearancePatch={setAppearancePatch} />}
-      {activePage === 'import' && <ImportAssetsPage />}
-      {activePage === 'inspirations' && <InspirationsPage onApplyAppearancePatch={setAppearancePatch} />}
-      {activePage === 'composer' && <ComposerPage onApplyAppearancePatch={setAppearancePatch} />}
-      {activePage === 'settings' && (
-        <SettingsPage activeAppearanceId={baseAppearancePreset.id} onAppearanceChange={handleAppearancePresetChange} />
-      )}
+      <Suspense fallback={<PageLoadingFallback />}>
+        {activePage === 'themes' && <ThemeWorkbenchPage onApplyAppearancePatch={setAppearancePatch} />}
+        {activePage === 'import' && <ImportAssetsPage />}
+        {activePage === 'inspirations' && <InspirationsPage onApplyAppearancePatch={setAppearancePatch} />}
+        {activePage === 'composer' && <ComposerPage onApplyAppearancePatch={setAppearancePatch} />}
+        {activePage === 'settings' && (
+          <SettingsPage activeAppearanceId={baseAppearancePreset.id} onAppearanceChange={handleAppearancePresetChange} />
+        )}
+      </Suspense>
     </div>
   );
 }

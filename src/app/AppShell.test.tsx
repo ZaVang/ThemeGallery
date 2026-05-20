@@ -27,7 +27,7 @@ describe('AppShell', () => {
     await user.click(within(nav).getByRole('button', { name: 'Inspirations' }));
 
     expect(within(nav).getByRole('button', { name: 'Inspirations' })).toHaveAttribute('aria-current', 'page');
-    expect(screen.getByRole('heading', { name: 'Inspirations' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Inspirations' })).toBeInTheDocument();
   });
 
   it('opens image import as a dedicated page', async () => {
@@ -38,8 +38,8 @@ describe('AppShell', () => {
     await user.click(within(nav).getByRole('button', { name: 'Import' }));
 
     expect(within(nav).getByRole('button', { name: 'Import' })).toHaveAttribute('aria-current', 'page');
-    expect(screen.getByRole('heading', { name: 'Import' })).toBeInTheDocument();
-    expect(screen.getByText('Palette Extractor')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Import' })).toBeInTheDocument();
+    expect(await screen.findByText('Palette Extractor')).toBeInTheDocument();
   });
 
   it('applies a selected app appearance preset through --app variables', async () => {
@@ -47,7 +47,7 @@ describe('AppShell', () => {
     render(<AppShell />);
 
     await user.click(screen.getByRole('button', { name: 'Settings' }));
-    await user.click(screen.getByRole('button', { name: 'Quiet Dark' }));
+    await user.click(await screen.findByRole('button', { name: 'Quiet Dark' }));
 
     const appRoot = screen.getByTestId('app-root');
     expect(appRoot).toHaveStyle({ '--app-bg': '#101316' });
@@ -60,7 +60,7 @@ describe('AppShell', () => {
 
     const nav = screen.getByRole('navigation', { name: 'Primary pages' });
     await user.click(within(nav).getByRole('button', { name: 'Inspirations' }));
-    await user.click(screen.getByRole('button', { name: 'Apply Luna Blue Metal to app appearance' }));
+    await user.click(await screen.findByRole('button', { name: 'Apply Luna Blue Metal to app appearance' }));
 
     const appRoot = screen.getByTestId('app-root');
     expect(appRoot).toHaveStyle({ '--app-accent': '#54ACBF' });
@@ -73,7 +73,7 @@ describe('AppShell', () => {
 
     const nav = screen.getByRole('navigation', { name: 'Primary pages' });
     await user.click(within(nav).getByRole('button', { name: 'Composer' }));
-    await user.click(screen.getByRole('button', { name: 'Use Luna Ocean Color' }));
+    await user.click(await screen.findByRole('button', { name: 'Use Luna Ocean Color' }));
     await user.click(screen.getByRole('button', { name: 'Use Editorial Serif Type' }));
     await user.click(screen.getByRole('button', { name: 'Apply style mix to app appearance' }));
 

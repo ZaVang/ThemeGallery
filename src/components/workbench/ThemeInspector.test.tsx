@@ -44,7 +44,7 @@ const theme: NormalizedTheme = {
 };
 
 describe('ThemeInspector', () => {
-  it('shows metadata, warnings, typography, spacing, and markdown notes', () => {
+  it('shows metadata, warnings, typography, spacing, and markdown notes', async () => {
     render(<ThemeInspector theme={theme} />);
 
     expect(screen.getByText('Soft Mauve')).toBeInTheDocument();
@@ -62,6 +62,6 @@ describe('ThemeInspector', () => {
     expect(screen.getByText('derived')).toBeInTheDocument();
     expect(screen.getByText('fallback')).toBeInTheDocument();
     expect(screen.getByText('container-padding')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '感受' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: '感受' })).toBeInTheDocument();
   });
 });

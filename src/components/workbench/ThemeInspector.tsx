@@ -1,8 +1,10 @@
-import ReactMarkdown from 'react-markdown';
+import { lazy, Suspense } from 'react';
 import { createQuickBrief } from '../../theme/quickBrief';
 import { analyzeThemeRisks } from '../../theme/themeRisks';
 import { splitThemeWarnings } from '../../theme/warningClassification';
 import type { NormalizedTheme, ThemeRiskSummary } from '../../types/theme';
+
+const MarkdownNotes = lazy(() => import('./MarkdownNotes').then((module) => ({ default: module.MarkdownNotes })));
 
 interface ThemeInspectorProps {
   theme: NormalizedTheme;
@@ -140,7 +142,9 @@ export function ThemeInspector({ theme }: ThemeInspectorProps) {
 
       {theme.markdownBody && (
         <section className="inspector-section markdown-notes">
-          <ReactMarkdown>{theme.markdownBody}</ReactMarkdown>
+          <Suspense fallback={<p className="markdown-loading">Loading notes...</p>}>
+            <MarkdownNotes markdown={theme.markdownBody} />
+          </Suspense>
         </section>
       )}
     </aside>
