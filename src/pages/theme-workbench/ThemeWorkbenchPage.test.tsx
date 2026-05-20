@@ -6,7 +6,7 @@ describe('ThemeWorkbenchPage', () => {
   it('renders the local theme workbench sources', () => {
     render(<ThemeWorkbenchPage />);
 
-    expect(screen.getByRole('heading', { name: 'ThemeGallery' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Themes' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Select Linear' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Select Soft Mauve' })).toBeInTheDocument();
   });

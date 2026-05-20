@@ -1,6 +1,6 @@
-import { ThemeWorkbenchPage } from './pages/theme-workbench/ThemeWorkbenchPage';
+import { AppShell } from './app/AppShell';
 import './styles.css';
 
 export default function App() {
-  return <ThemeWorkbenchPage />;
+  return <AppShell />;
 }

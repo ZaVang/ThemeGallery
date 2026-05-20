@@ -1,0 +1,43 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { within } from '@testing-library/react';
+import { AppShell } from './AppShell';
+
+describe('AppShell', () => {
+  it('renders the primary product pages and defaults to Themes', () => {
+    render(<AppShell />);
+
+    const nav = screen.getByRole('navigation', { name: 'Primary pages' });
+
+    expect(nav).toBeInTheDocument();
+    expect(within(nav).getByRole('button', { name: 'Themes' })).toHaveAttribute('aria-current', 'page');
+    expect(within(nav).getByRole('button', { name: 'Inspirations' })).toBeInTheDocument();
+    expect(within(nav).getByRole('button', { name: 'Composer' })).toBeInTheDocument();
+    expect(within(nav).getByRole('button', { name: 'Settings' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Themes' })).toBeInTheDocument();
+  });
+
+  it('switches pages without leaving the app shell', async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const nav = screen.getByRole('navigation', { name: 'Primary pages' });
+
+    await user.click(within(nav).getByRole('button', { name: 'Inspirations' }));
+
+    expect(within(nav).getByRole('button', { name: 'Inspirations' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('heading', { name: 'Inspirations' })).toBeInTheDocument();
+  });
+
+  it('applies a selected app appearance preset through --app variables', async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole('button', { name: 'Settings' }));
+    await user.click(screen.getByRole('button', { name: 'Quiet Dark' }));
+
+    const appRoot = screen.getByTestId('app-root');
+    expect(appRoot).toHaveStyle({ '--app-bg': '#101316' });
+    expect(appRoot).toHaveAttribute('data-app-material', 'solid');
+  });
+});

@@ -3,9 +3,10 @@ import userEvent from '@testing-library/user-event';
 import App from './App';
 
 describe('App', () => {
-  it('renders the ThemeGallery workbench title', () => {
+  it('renders the product shell and default themes page', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: 'ThemeGallery' })).toBeInTheDocument();
+    expect(screen.getByText('ThemeGallery')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Themes' })).toBeInTheDocument();
   });
 
   it('loads existing local markdown sources', () => {

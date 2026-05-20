@@ -40,10 +40,10 @@ export function ThemeWorkbenchPage() {
   }
 
   return (
-    <main className="app-shell">
+    <main className="app-page">
       <PageHeader
-        eyebrow="Local theme workbench"
-        title="ThemeGallery"
+        eyebrow="Complete design systems"
+        title="Themes"
         summary="Reads local Markdown themes and palettes, then renders product previews from normalized tokens."
       />
 
