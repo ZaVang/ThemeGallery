@@ -1,4 +1,4 @@
-import type { ParsedThemeSource } from '../types/theme';
+import type { PaletteColor, ParsedThemeSource } from '../types/theme';
 import { derivePaletteTheme } from './derivePaletteTheme';
 
 const softMauve: ParsedThemeSource = {
@@ -42,5 +42,35 @@ describe('derivePaletteTheme', () => {
       { name: 'Mauve Shadow', hex: '#5c3d52', role: 'surface' },
     ]);
     expect(theme.warnings).toContain('Palette-derived theme uses Base UI Foundation typography, spacing, radius, and component tokens.');
+  });
+
+  it('generates gradients when palette markdown does not provide them', () => {
+    const theme = derivePaletteTheme({
+      ...softMauve,
+      gradients: [],
+    });
+
+    expect(theme.gradients).toEqual([
+      { from: '#b8a9c9', to: '#f0f8ff' },
+      { from: '#88d8c0', to: '#5c3d52' },
+      { from: '#c9a0b0', to: '#f0f8ff' },
+    ]);
+  });
+
+  it('maps text and danger roles into readable UI tokens', () => {
+    const theme = derivePaletteTheme({
+      ...softMauve,
+      colors: [
+        ...(softMauve.colors as PaletteColor[]),
+        { name: 'Ink', hex: '#102030', role: 'text' },
+        { name: 'Warning Red', hex: '#B00020', role: 'danger' },
+      ],
+    });
+
+    expect(theme.colors['on-background']).toBe('#102030');
+    expect(theme.colors['on-surface']).toBe('#102030');
+    expect(theme.colors['on-surface-variant']).toBe('#102030');
+    expect(theme.colors.error).toBe('#b00020');
+    expect(theme.colors['on-error']).toBe('#ffffff');
   });
 });

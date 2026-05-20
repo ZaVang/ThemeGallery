@@ -57,6 +57,26 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function automaticGradients(
+  background: NormalizedSwatch,
+  surface: NormalizedSwatch,
+  primary: NormalizedSwatch,
+  secondary: NormalizedSwatch,
+  tertiary: NormalizedSwatch,
+) {
+  return [
+    { from: primary.hex, to: background.hex },
+    { from: secondary.hex, to: surface.hex },
+    { from: tertiary.hex, to: background.hex },
+  ].filter((gradient, index, gradients) => {
+    if (gradient.from === gradient.to) {
+      return false;
+    }
+
+    return gradients.findIndex((candidate) => candidate.from === gradient.from && candidate.to === gradient.to) === index;
+  });
+}
+
 export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
   const warnings = [...source.warnings, foundationWarning];
   const rawColors = Array.isArray(source.colors) ? source.colors : [];
@@ -72,11 +92,18 @@ export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
   const secondary = pickRole(swatches, 'secondary', swatches[2] ?? primary, warnings);
   const tertiary = byRole(swatches, 'accent') ?? pickRole(swatches, 'tertiary', swatches[3] ?? secondary, warnings);
   const surface = pickRole(swatches, 'surface', background, warnings);
+  const text = byRole(swatches, 'text');
+  const danger = byRole(swatches, 'danger') ?? byRole(swatches, 'error');
   const surfaceContainer = mixHex(surface.hex, background.hex, 0.22);
   const surfaceContainerHigh = mixHex(surface.hex, background.hex, 0.36);
   const primaryContainer = mixHex(primary.hex, background.hex, 0.72);
   const secondaryContainer = mixHex(secondary.hex, background.hex, 0.72);
   const tertiaryContainer = mixHex(tertiary.hex, background.hex, 0.72);
+  const error = danger?.hex ?? baseFoundation.colors.error;
+  const errorContainer = mixHex(error, background.hex, 0.72);
+  const readableOnBackground = text?.hex ?? readableTextColor(background.hex);
+  const readableOnSurface = text?.hex ?? readableTextColor(surface.hex);
+  const readableOnSurfaceVariant = text?.hex ?? readableTextColor(surfaceContainerHigh);
 
   const paletteTokens = Object.fromEntries(
     swatches.map((swatch) => [`palette-${slugify(swatch.name) || swatch.hex.slice(1)}`, swatch.hex]),
@@ -86,6 +113,8 @@ export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
     from: normalizeHex(gradient.from),
     to: normalizeHex(gradient.to),
   }));
+  const derivedGradients =
+    gradients.length > 0 ? gradients : automaticGradients(background, surface, primary, secondary, tertiary);
 
   return {
     id: source.id,
@@ -104,10 +133,10 @@ export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
       ...baseFoundation.colors,
       ...paletteTokens,
       background: background.hex,
-      'on-background': readableTextColor(background.hex),
+      'on-background': readableOnBackground,
       surface: surface.hex,
-      'on-surface': readableTextColor(surface.hex),
-      'on-surface-variant': readableTextColor(surfaceContainerHigh),
+      'on-surface': readableOnSurface,
+      'on-surface-variant': readableOnSurfaceVariant,
       'surface-dim': mixHex(background.hex, surface.hex, 0.12),
       'surface-bright': mixHex(background.hex, '#ffffff', 0.55),
       'surface-container-lowest': background.hex,
@@ -132,10 +161,14 @@ export function derivePaletteTheme(source: ParsedThemeSource): NormalizedTheme {
       'on-tertiary': readableTextColor(tertiary.hex),
       'tertiary-container': tertiaryContainer,
       'on-tertiary-container': readableTextColor(tertiaryContainer),
+      error,
+      'on-error': readableTextColor(error),
+      'error-container': errorContainer,
+      'on-error-container': readableTextColor(errorContainer),
       'inverse-surface': readableTextColor(background.hex) === '#ffffff' ? '#f8fafc' : '#111827',
       'inverse-on-surface': readableTextColor(background.hex) === '#ffffff' ? '#111827' : '#ffffff',
     },
-    gradients,
+    gradients: derivedGradients,
     typography: cloneFoundation(baseFoundation.typography),
     rounded: cloneFoundation(baseFoundation.rounded),
     spacing: cloneFoundation(baseFoundation.spacing),

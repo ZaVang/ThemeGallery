@@ -7,9 +7,27 @@ import {
   normalizeEditableHex,
   type EditablePaletteColor,
 } from '../../palette/paletteMarkdown';
+import { savePaletteMarkdown, type SavePaletteInput, type SavePaletteResult } from '../../palette/savePalette';
+import { themeToCssVars } from '../../theme/cssVars';
+import { normalizeTheme } from '../../theme/normalizeTheme';
+import { scenarioTagLabel, scenarioTags, type ScenarioTag } from '../../theme/scenarioTags';
+
+const paletteRoleOptions = Array.from(new Set([...defaultPaletteRoles, 'tertiary', 'text', 'danger', 'error']));
+
+const roleSlots = [
+  { role: 'background', label: 'Background' },
+  { role: 'surface', label: 'Surface' },
+  { role: 'primary', label: 'Primary' },
+  { role: 'secondary', label: 'Secondary' },
+  { role: 'accent', label: 'Accent' },
+  { role: 'text', label: 'Text' },
+  { role: 'danger', label: 'Danger' },
+] as const;
 
 interface PaletteExtractorProps {
   initialColors?: EditablePaletteColor[];
+  reloadAfterSave?: boolean;
+  savePalette?: (input: SavePaletteInput) => Promise<SavePaletteResult>;
 }
 
 function titleFromFile(file: File): string {
@@ -24,7 +42,15 @@ function updateColor(
   return colors.map((color) => (color.id === id ? { ...color, ...patch } : color));
 }
 
-export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) {
+function colorOptionLabel(color: EditablePaletteColor, index: number): string {
+  return `${color.name.trim() || `Color ${index + 1}`} (${normalizeEditableHex(color.hex)})`;
+}
+
+export function PaletteExtractor({
+  initialColors = [],
+  reloadAfterSave = true,
+  savePalette = savePaletteMarkdown,
+}: PaletteExtractorProps) {
   const [name, setName] = useState('Imported Palette');
   const [source, setSource] = useState('小红书');
   const [mood, setMood] = useState('');
@@ -32,10 +58,29 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
   const [fileName, setFileName] = useState('No image selected');
   const [status, setStatus] = useState('Upload a Xiaohongshu color card image to extract swatches.');
   const [actionStatus, setActionStatus] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [selectedScenarioTags, setSelectedScenarioTags] = useState<ScenarioTag[]>([]);
 
   const markdown = useMemo(
-    () => createPaletteMarkdown({ name, source, mood, colors }),
-    [colors, mood, name, source],
+    () => createPaletteMarkdown({ name, source, mood, tags: selectedScenarioTags, colors }),
+    [colors, mood, name, selectedScenarioTags, source],
+  );
+  const previewTheme = useMemo(
+    () =>
+      normalizeTheme({
+        sourceKind: 'palette',
+        filePath: 'palettes/imported-preview.md',
+        id: 'palette-extractor-preview',
+        name: name.trim() || 'Imported Palette',
+        tags: ['imported', 'palette', ...selectedScenarioTags],
+        source,
+        mood,
+        colors,
+        gradients: [],
+        markdownBody: mood.trim() || 'Imported from image. Adjust names, roles, and colors before saving.',
+        warnings: [],
+      }),
+    [colors, mood, name, selectedScenarioTags, source],
   );
 
   async function handleFile(file: File | undefined) {
@@ -72,6 +117,49 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
     setColors(colors.filter((color) => color.id !== id));
   }
 
+  function toggleScenarioTag(tag: ScenarioTag) {
+    setSelectedScenarioTags((currentTags) =>
+      currentTags.includes(tag) ? currentTags.filter((currentTag) => currentTag !== tag) : [...currentTags, tag],
+    );
+  }
+
+  function colorIdForRole(role: string): string {
+    const match = colors.find((color) => {
+      if (role === 'accent') {
+        return color.role === 'accent' || color.role === 'tertiary';
+      }
+
+      if (role === 'danger') {
+        return color.role === 'danger' || color.role === 'error';
+      }
+
+      return color.role === role;
+    });
+
+    return match?.id ?? '';
+  }
+
+  function assignRole(role: string, id: string) {
+    setColors((currentColors) =>
+      currentColors.map((color) => {
+        const roleMatches = color.role === role || (role === 'danger' && color.role === 'error');
+        if (!id && roleMatches) {
+          return { ...color, role: 'accent' };
+        }
+
+        if (color.id === id) {
+          return { ...color, role };
+        }
+
+        if (role !== 'accent' && roleMatches) {
+          return { ...color, role: 'accent' };
+        }
+
+        return color;
+      }),
+    );
+  }
+
   async function copyMarkdown() {
     try {
       await navigator.clipboard.writeText(markdown);
@@ -90,6 +178,28 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
     link.click();
     URL.revokeObjectURL(url);
     setActionStatus(`Downloaded ${link.download}. Save it into palettes/.`);
+  }
+
+  async function saveToLibrary() {
+    if (colors.length === 0) {
+      setActionStatus('Add at least one color before saving.');
+      return;
+    }
+
+    const nextFileName = createPaletteFileName(name);
+    setIsSaving(true);
+    setActionStatus(`Saving to palettes/${nextFileName}...`);
+    try {
+      const result = await savePalette({ fileName: nextFileName, markdown });
+      setActionStatus(`Saved to ${result.filePath}. Reloading library...`);
+      if (reloadAfterSave) {
+        window.setTimeout(() => window.location.reload(), 500);
+      }
+    } catch (error) {
+      setActionStatus(error instanceof Error ? error.message : 'Unable to save palette Markdown.');
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -126,6 +236,64 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
           <input aria-label="Palette mood" value={mood} onChange={(event) => setMood(event.target.value)} />
         </label>
 
+        <section className="scenario-tag-panel" aria-label="Usage scenario tags">
+          <div className="scenario-tag-panel__heading">
+            <h3>Usage tags</h3>
+            <p>Mark likely product contexts for later filtering.</p>
+          </div>
+          <div className="scenario-tag-grid">
+            {scenarioTags.map((tag) => (
+              <label className="scenario-tag-option" key={tag}>
+                <input
+                  checked={selectedScenarioTags.includes(tag)}
+                  type="checkbox"
+                  onChange={() => toggleScenarioTag(tag)}
+                />
+                <span>{scenarioTagLabel(tag)}</span>
+              </label>
+            ))}
+          </div>
+        </section>
+
+        {colors.length > 0 && (
+          <section className="role-mapping-panel" aria-label="Color role mapping">
+            <div className="role-mapping-panel__heading">
+              <h3>Role mapping</h3>
+              <p>Assign key UI roles before saving.</p>
+            </div>
+            <div className="role-slot-grid">
+              {roleSlots.map((slot) => (
+                <label className="role-slot" key={slot.role}>
+                  <span>{slot.label}</span>
+                  <select
+                    aria-label={`Assign ${slot.role} role`}
+                    value={colorIdForRole(slot.role)}
+                    onChange={(event) => assignRole(slot.role, event.target.value)}
+                  >
+                    <option value="">Unassigned</option>
+                    {colors.map((color, index) => (
+                      <option key={color.id} value={color.id}>
+                        {colorOptionLabel(color, index)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ))}
+            </div>
+            <div className="role-preview" aria-label="Derived role preview" style={themeToCssVars(previewTheme)}>
+              <div className="role-preview__surface">
+                <span>Live derived preview</span>
+                <strong>{previewTheme.name}</strong>
+                <p>{previewTheme.mood || 'Role changes update this local derived palette preview.'}</p>
+                <div className="role-preview__actions">
+                  <button type="button">Primary action</button>
+                  <span>Danger state</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         <div className="editable-palette-list" aria-label="Editable palette colors">
           {colors.map((color, index) => (
             <div className="editable-palette-row" key={color.id}>
@@ -153,7 +321,7 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
                   value={color.role}
                   onChange={(event) => setColors(updateColor(colors, color.id, { role: event.target.value }))}
                 >
-                  {[...defaultPaletteRoles, 'tertiary', 'error'].map((role) => (
+                  {paletteRoleOptions.map((role) => (
                     <option key={role} value={role}>
                       {role}
                     </option>
@@ -176,6 +344,12 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
           <textarea aria-label="Generated palette markdown" readOnly value={markdown} />
         </label>
         <div className="extractor-actions">
+          <button className="primary-action" type="button" disabled={isSaving} onClick={() => void saveToLibrary()}>
+            {isSaving ? 'Saving...' : 'Save to palettes/'}
+          </button>
+        </div>
+        <p className="extractor-status">Primary save target: palettes/{createPaletteFileName(name)}</p>
+        <div className="extractor-actions">
           <button className="secondary-action" type="button" onClick={() => void copyMarkdown()}>
             Copy Markdown
           </button>
@@ -183,9 +357,6 @@ export function PaletteExtractor({ initialColors = [] }: PaletteExtractorProps) 
             Download .md
           </button>
         </div>
-        <p className="extractor-status">
-          Save it into palettes/{createPaletteFileName(name)} so ThemeGallery can load it on the next refresh.
-        </p>
         {actionStatus && <p className="extractor-status">{actionStatus}</p>}
       </div>
     </details>

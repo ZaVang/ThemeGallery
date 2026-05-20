@@ -1,8 +1,10 @@
 import { isHexColor, readableTextColor } from '../../theme/colorMath';
+import { sortColorSwatchesForDisplay } from '../../theme/colorDisplay';
 import type { ColorSwatch, NormalizedTheme } from '../../types/theme';
 
 interface ColorCardPreviewProps {
   theme: NormalizedTheme;
+  useThemeGradient?: boolean;
 }
 
 function displayHex(value: string): string {
@@ -17,11 +19,12 @@ function swatchMeta(swatch: ColorSwatch): string {
   return swatch.role ?? swatch.token ?? 'color';
 }
 
-export function ColorCardPreview({ theme }: ColorCardPreviewProps) {
-  const primaryGradient = theme.gradients[0];
+export function ColorCardPreview({ theme, useThemeGradient = true }: ColorCardPreviewProps) {
+  const primaryGradient = useThemeGradient ? theme.gradients[0] : undefined;
   const artStyle = primaryGradient
     ? { background: `linear-gradient(135deg, ${primaryGradient.from}, ${primaryGradient.to})` }
     : undefined;
+  const colorSwatches = sortColorSwatchesForDisplay(theme.colorSwatches);
 
   return (
     <div className="scene scene-color-card">
@@ -33,7 +36,7 @@ export function ColorCardPreview({ theme }: ColorCardPreviewProps) {
         </header>
 
         <div className="color-card-stack">
-          {theme.colorSwatches.map((swatch) => (
+          {colorSwatches.map((swatch) => (
             <article
               className="color-card-row"
               key={`${swatch.name}-${swatch.hex}-${swatch.role ?? swatch.token ?? 'color'}`}

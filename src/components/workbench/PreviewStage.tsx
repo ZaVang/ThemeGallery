@@ -1,21 +1,26 @@
 import { useState } from 'react';
 import { themeToCssVars } from '../../theme/cssVars';
 import type { NormalizedTheme } from '../../types/theme';
-import { ComponentsPreview } from '../previews/ComponentsPreview';
-import { ColorCardPreview } from '../previews/ColorCardPreview';
-import { DashboardPreview } from '../previews/DashboardPreview';
-import { LandingPreview } from '../previews/LandingPreview';
-import { MobilePreview } from '../previews/MobilePreview';
-
-const tabs = ['Dashboard', 'Landing', 'Mobile', 'Components', 'Color Card'] as const;
-type PreviewTab = (typeof tabs)[number];
+import { PreviewScene, previewTabs, type PreviewTab } from './previewScenes';
 
 interface PreviewStageProps {
+  activeTab?: PreviewTab;
+  onActiveTabChange?: (tab: PreviewTab) => void;
   theme: NormalizedTheme;
 }
 
-export function PreviewStage({ theme }: PreviewStageProps) {
-  const [activeTab, setActiveTab] = useState<PreviewTab>('Dashboard');
+export function PreviewStage({ activeTab, onActiveTabChange, theme }: PreviewStageProps) {
+  const [localActiveTab, setLocalActiveTab] = useState<PreviewTab>('Dashboard');
+  const currentTab = activeTab ?? localActiveTab;
+
+  function handleTabChange(tab: PreviewTab) {
+    if (onActiveTabChange) {
+      onActiveTabChange(tab);
+      return;
+    }
+
+    setLocalActiveTab(tab);
+  }
 
   return (
     <section className="stage-panel" aria-label="Preview stage" style={themeToCssVars(theme)}>
@@ -25,12 +30,12 @@ export function PreviewStage({ theme }: PreviewStageProps) {
           <h2>{theme.name}</h2>
         </div>
         <div className="tab-list" role="tablist" aria-label="Preview scenes">
-          {tabs.map((tab) => (
+          {previewTabs.map((tab) => (
             <button
-              aria-selected={activeTab === tab}
-              className={activeTab === tab ? 'preview-tab is-active' : 'preview-tab'}
+              aria-selected={currentTab === tab}
+              className={currentTab === tab ? 'preview-tab is-active' : 'preview-tab'}
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabChange(tab)}
               role="tab"
               type="button"
             >
@@ -40,11 +45,7 @@ export function PreviewStage({ theme }: PreviewStageProps) {
         </div>
       </div>
       <div className="stage-canvas">
-        {activeTab === 'Dashboard' && <DashboardPreview />}
-        {activeTab === 'Landing' && <LandingPreview />}
-        {activeTab === 'Mobile' && <MobilePreview />}
-        {activeTab === 'Components' && <ComponentsPreview />}
-        {activeTab === 'Color Card' && <ColorCardPreview theme={theme} />}
+        <PreviewScene activeTab={currentTab} theme={theme} />
       </div>
     </section>
   );

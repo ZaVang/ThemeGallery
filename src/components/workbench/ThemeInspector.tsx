@@ -1,13 +1,29 @@
 import ReactMarkdown from 'react-markdown';
+import { createQuickBrief } from '../../theme/quickBrief';
+import { analyzeThemeRisks } from '../../theme/themeRisks';
 import { splitThemeWarnings } from '../../theme/warningClassification';
-import type { NormalizedTheme } from '../../types/theme';
+import type { NormalizedTheme, ThemeRiskSummary } from '../../types/theme';
 
 interface ThemeInspectorProps {
   theme: NormalizedTheme;
 }
 
+function riskStatusText(summary: ThemeRiskSummary): string {
+  if (summary.status === 'fail') {
+    return `${summary.failCount} hard ${summary.failCount === 1 ? 'risk' : 'risks'} and ${summary.noteCount} design ${summary.noteCount === 1 ? 'note' : 'notes'}.`;
+  }
+
+  if (summary.status === 'review') {
+    return `${summary.noteCount} design ${summary.noteCount === 1 ? 'note' : 'notes'} to review.`;
+  }
+
+  return 'Core readability checks look usable.';
+}
+
 export function ThemeInspector({ theme }: ThemeInspectorProps) {
   const warningGroups = splitThemeWarnings(theme.warnings);
+  const riskSummary = theme.riskSummary ?? analyzeThemeRisks(theme);
+  const quickBrief = createQuickBrief({ ...theme, riskSummary });
 
   return (
     <aside className="inspector-panel" role="region" aria-label="Theme inspector">
@@ -41,6 +57,22 @@ export function ThemeInspector({ theme }: ThemeInspectorProps) {
           ))}
         </section>
       )}
+
+      <section className={`inspector-section risk-list is-${riskSummary.status}`}>
+        <h3>Readability Risks</h3>
+        <p>{riskStatusText(riskSummary)}</p>
+        {riskSummary.items.map((item) => (
+          <div className="risk-item" key={`${item.severity}-${item.label}-${item.message}`}>
+            <strong>{item.severity === 'fail' ? 'Needs fix' : 'Design note'}</strong>
+            <span>{item.message}</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="inspector-section quick-brief">
+        <h3>Quick Brief</h3>
+        <pre>{quickBrief}</pre>
+      </section>
 
       <section className="inspector-section">
         <h3>Colors</h3>

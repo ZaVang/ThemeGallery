@@ -10,6 +10,7 @@ import { baseFoundation } from './baseFoundation';
 import { isHexColor, normalizeColorValue } from './colorMath';
 import { derivePaletteTheme } from './derivePaletteTheme';
 import { resolveReferences } from './resolveReferences';
+import { analyzeThemeRisks } from './themeRisks';
 
 const requiredColorTokens = [
   'background',
@@ -116,9 +117,18 @@ function resolveThemeReferences(theme: NormalizedTheme): NormalizedTheme {
   };
 }
 
+function finalizeTheme(theme: NormalizedTheme): NormalizedTheme {
+  const resolved = resolveThemeReferences(theme);
+
+  return {
+    ...resolved,
+    riskSummary: analyzeThemeRisks(resolved),
+  };
+}
+
 export function normalizeTheme(source: ParsedThemeSource): NormalizedTheme {
   if (source.sourceKind === 'palette' || Array.isArray(source.colors)) {
-    return resolveThemeReferences(derivePaletteTheme(source));
+    return finalizeTheme(derivePaletteTheme(source));
   }
 
   const warnings = [...source.warnings];
@@ -154,5 +164,5 @@ export function normalizeTheme(source: ParsedThemeSource): NormalizedTheme {
     warnings,
   };
 
-  return resolveThemeReferences(theme);
+  return finalizeTheme(theme);
 }

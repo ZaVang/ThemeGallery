@@ -34,6 +34,23 @@ export interface GradientToken {
   to: string;
 }
 
+export type ThemeRiskSeverity = 'fail' | 'note';
+export type ThemeRiskStatus = 'pass' | 'review' | 'fail';
+
+export interface ThemeRiskItem {
+  severity: ThemeRiskSeverity;
+  label: string;
+  message: string;
+  ratio?: number;
+}
+
+export interface ThemeRiskSummary {
+  status: ThemeRiskStatus;
+  failCount: number;
+  noteCount: number;
+  items: ThemeRiskItem[];
+}
+
 export interface ParsedThemeSource {
   sourceKind: SourceKind;
   filePath: string;
@@ -68,5 +85,6 @@ export interface NormalizedTheme {
   spacing: Record<string, string>;
   components: Record<string, ComponentToken>;
   markdownBody: string;
+  riskSummary?: ThemeRiskSummary;
   warnings: string[];
 }

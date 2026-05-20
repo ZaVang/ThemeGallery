@@ -11,6 +11,7 @@ export interface PaletteMarkdownInput {
   name: string;
   source: string;
   mood: string;
+  tags?: string[];
   colors: EditablePaletteColor[];
 }
 
@@ -38,12 +39,26 @@ function escapeYamlString(value: string): string {
   return value.replaceAll('"', '\\"');
 }
 
-export function createPaletteMarkdown({ name, source, mood, colors }: PaletteMarkdownInput): string {
+function normalizeTags(tags: string[] = []): string[] {
+  return Array.from(
+    new Set(
+      ['imported', 'palette', ...tags]
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  );
+}
+
+function formatInlineYamlList(values: string[]): string {
+  return `[${values.map((value) => `"${escapeYamlString(value)}"`).join(', ')}]`;
+}
+
+export function createPaletteMarkdown({ name, source, mood, tags, colors }: PaletteMarkdownInput): string {
   const safeName = name.trim() || 'Imported Palette';
   const lines = [
     '---',
     `name: ${safeName}`,
-    'tags: [imported, palette]',
+    `tags: ${formatInlineYamlList(normalizeTags(tags))}`,
   ];
 
   if (mood.trim()) {
