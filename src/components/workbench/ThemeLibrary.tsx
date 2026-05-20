@@ -1,6 +1,6 @@
 import type { NormalizedTheme } from '../../types/theme';
 import { countActionableWarnings } from '../../theme/warningClassification';
-import { displayColorTokens } from '../../theme/colorDisplay';
+import { createDisplayColorSwatches } from '../../theme/colorDisplay';
 
 interface ThemeLibraryProps {
   comparisonThemeKeys?: string[];
@@ -53,8 +53,8 @@ export function ThemeLibrary({
                 </span>
                 <span className="theme-row__meta">{theme.filePath}</span>
                 <span className="swatch-strip" aria-hidden="true">
-                  {displayColorTokens.map((token) => (
-                    <span key={token} style={{ backgroundColor: theme.colors[token] }} />
+                  {createDisplayColorSwatches(theme).map((swatch) => (
+                    <span key={`${swatch.token ?? swatch.role ?? swatch.name}-${swatch.hex}`} style={{ backgroundColor: swatch.hex }} />
                   ))}
                 </span>
                 <span className="theme-row__tags">

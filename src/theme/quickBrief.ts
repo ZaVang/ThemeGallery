@@ -1,5 +1,5 @@
 import type { NormalizedTheme, ThemeRiskSummary } from '../types/theme';
-import { displayColorTokens } from './colorDisplay';
+import { createDisplayColorSwatches } from './colorDisplay';
 import { analyzeThemeRisks } from './themeRisks';
 
 function compact(value: string): string {
@@ -33,12 +33,11 @@ function riskNotes(summary: ThemeRiskSummary): string {
 }
 
 function colorLine(theme: NormalizedTheme): string {
-  const tokens = displayColorTokens
-    .map((token) => {
-      const value = theme.colors[token];
-      return value ? `${token === 'tertiary' ? 'accent' : token} ${value}` : undefined;
-    })
-    .filter(Boolean);
+  const tokens = createDisplayColorSwatches(theme).map((swatch) => {
+    const role = swatch.token ?? swatch.role ?? swatch.name;
+    const label = theme.kind === 'palette-derived' && role === 'tertiary' ? 'accent' : role;
+    return `${label} ${swatch.hex}`;
+  });
 
   return tokens.join(', ');
 }

@@ -1,5 +1,5 @@
 import { isHexColor, readableTextColor } from '../../theme/colorMath';
-import { sortColorSwatchesForDisplay } from '../../theme/colorDisplay';
+import { createDisplayColorSwatches } from '../../theme/colorDisplay';
 import type { ColorSwatch, NormalizedTheme } from '../../types/theme';
 
 interface ColorCardPreviewProps {
@@ -24,7 +24,7 @@ export function ColorCardPreview({ theme, useThemeGradient = true }: ColorCardPr
   const artStyle = primaryGradient
     ? { background: `linear-gradient(135deg, ${primaryGradient.from}, ${primaryGradient.to})` }
     : undefined;
-  const colorSwatches = sortColorSwatchesForDisplay(theme.colorSwatches);
+  const colorSwatches = createDisplayColorSwatches(theme);
 
   return (
     <div className="scene scene-color-card">

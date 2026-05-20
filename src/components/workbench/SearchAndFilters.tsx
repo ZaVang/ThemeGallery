@@ -1,19 +1,17 @@
-import type { ThemeKind } from '../../types/theme';
+import type { ThemeSourceFilter } from '../../types/sourceLibrary';
 import { scenarioTagLabel, scenarioTags, type ScenarioTagFilter } from '../../theme/scenarioTags';
-
-export type ThemeFilter = 'all' | ThemeKind;
 
 interface SearchAndFiltersProps {
   query: string;
-  filter: ThemeFilter;
+  filter: ThemeSourceFilter;
   scenarioFilter: ScenarioTagFilter;
   resultCount: number;
   onQueryChange: (query: string) => void;
-  onFilterChange: (filter: ThemeFilter) => void;
+  onFilterChange: (filter: ThemeSourceFilter) => void;
   onScenarioFilterChange: (filter: ScenarioTagFilter) => void;
 }
 
-const filters: Array<{ value: ThemeFilter; label: string }> = [
+const filters: Array<{ value: ThemeSourceFilter; label: string }> = [
   { value: 'all', label: 'All' },
   { value: 'theme', label: 'Themes' },
   { value: 'palette-derived', label: 'Palettes' },
