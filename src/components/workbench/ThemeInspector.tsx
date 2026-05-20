@@ -82,6 +82,9 @@ export function ThemeInspector({ theme }: ThemeInspectorProps) {
               <span className="color-chip" style={{ backgroundColor: value }} />
               <span>{name}</span>
               <code>{value}</code>
+              {theme.colorProvenance?.[name] && (
+                <span className={`token-provenance is-${theme.colorProvenance[name]}`}>{theme.colorProvenance[name]}</span>
+              )}
             </div>
           ))}
         </div>

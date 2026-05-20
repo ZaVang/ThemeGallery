@@ -12,6 +12,11 @@ const theme: NormalizedTheme = {
   mood: '柔和雅致',
   source: '小红书',
   ...baseFoundation,
+  colorProvenance: {
+    background: 'authored',
+    'on-primary': 'derived',
+    error: 'fallback',
+  },
   colorSwatches: [
     { name: 'Alice Blue', hex: '#f0f8ff', role: 'background' },
     { name: 'Pale Slate', hex: '#b8a9c9', role: 'primary' },
@@ -53,6 +58,9 @@ describe('ThemeInspector', () => {
     expect(screen.getByRole('heading', { name: 'Quick Brief' })).toBeInTheDocument();
     expect(screen.getByText(/Palette-derived direction/)).toBeInTheDocument();
     expect(screen.getByText('body-md')).toBeInTheDocument();
+    expect(screen.getByText('authored')).toBeInTheDocument();
+    expect(screen.getByText('derived')).toBeInTheDocument();
+    expect(screen.getByText('fallback')).toBeInTheDocument();
     expect(screen.getByText('container-padding')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '感受' })).toBeInTheDocument();
   });

@@ -34,6 +34,8 @@ export interface GradientToken {
   to: string;
 }
 
+export type TokenProvenance = 'authored' | 'derived' | 'fallback';
+
 export type ThemeRiskSeverity = 'fail' | 'note';
 export type ThemeRiskStatus = 'pass' | 'review' | 'fail';
 
@@ -78,6 +80,7 @@ export interface NormalizedTheme {
   source?: string;
   mood?: string;
   colors: Record<string, string>;
+  colorProvenance?: Record<string, TokenProvenance>;
   colorSwatches: ColorSwatch[];
   gradients: GradientToken[];
   typography: Record<string, TypographyToken>;

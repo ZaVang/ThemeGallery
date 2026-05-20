@@ -8,30 +8,15 @@ tags:
   - editorial
 colors:
   background: "#FFFBEB"
-  on-background: "#1C1917"
   surface: "#FFFFFF"
-  on-surface: "#1C1917"
-  on-surface-variant: "#57534E"
-  surface-container: "#FAFAF9"
-  surface-container-high: "#F5F5F4"
-  outline: "#D4D4D8"
-  outline-variant: "#E7E5E4"
   primary: "#1C1917"
-  on-primary: "#FFFBEB"
-  primary-container: "#292524"
-  on-primary-container: "#FFFBEB"
   secondary: "#FFFBEB"
-  on-secondary: "#1C1917"
-  secondary-container: "#F5F5F4"
-  on-secondary-container: "#1C1917"
   tertiary: "#B8860B"
-  on-tertiary: "#FFFFFF"
-  error: "#991B1B"
-  on-error: "#FFFFFF"
+  neutral: "#D4D4D8"
   success: "#166534"
   warning: "#CA8A04"
+  error: "#991B1B"
   info: "#1E40AF"
-  neutral: "#D4D4D8"
 typography:
   display:
     fontFamily: Cormorant Garamond

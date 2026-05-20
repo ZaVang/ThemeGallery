@@ -1708,6 +1708,36 @@ button {
   overflow-wrap: anywhere;
 }
 
+.token-provenance {
+  grid-column: 2;
+  justify-self: start;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  padding: 2px 6px;
+  background: var(--app-surface-muted);
+  color: var(--app-text-muted);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 14px;
+  text-transform: uppercase;
+}
+
+.token-provenance.is-authored {
+  border-color: color-mix(in srgb, var(--app-accent), var(--app-border) 55%);
+  color: var(--app-accent);
+}
+
+.token-provenance.is-derived {
+  border-color: #d8e0e5;
+  color: #475467;
+}
+
+.token-provenance.is-fallback {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
 .color-chip {
   width: 24px;
   height: 24px;
