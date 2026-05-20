@@ -1666,6 +1666,121 @@ button {
   line-height: 22px;
 }
 
+.inspiration-workspace {
+  display: grid;
+  gap: 14px;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.dimension-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-lg);
+  padding: 10px;
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.inspiration-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 12px;
+}
+
+.inspiration-card {
+  display: grid;
+  grid-template-rows: 150px 1fr auto;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-lg);
+  background: var(--app-surface);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.inspiration-card__visual {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  padding: 14px;
+}
+
+.inspiration-card__visual span {
+  flex: 1;
+  min-width: 0;
+  height: 62px;
+  border: 1px solid rgb(255 255 255 / 0.36);
+  border-radius: var(--app-radius-xl);
+  box-shadow: 0 14px 30px rgb(15 23 42 / 0.2);
+}
+
+.inspiration-card__body {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 14px;
+}
+
+.inspiration-card__heading {
+  display: grid;
+  gap: 4px;
+}
+
+.inspiration-card__heading > span {
+  color: var(--app-text-muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.inspiration-card h2 {
+  margin: 0;
+  color: var(--app-text);
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.inspiration-card p {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.inspiration-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.inspiration-chip-row span {
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: var(--app-surface-muted);
+  color: var(--app-text-muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.cue-list {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--app-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.inspiration-card > .secondary-action {
+  width: auto;
+  margin: 0 14px 14px;
+}
+
 .settings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));

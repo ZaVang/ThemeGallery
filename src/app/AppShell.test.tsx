@@ -40,4 +40,17 @@ describe('AppShell', () => {
     expect(appRoot).toHaveStyle({ '--app-bg': '#101316' });
     expect(appRoot).toHaveAttribute('data-app-material', 'solid');
   });
+
+  it('applies an inspiration reference as a safe app appearance patch', async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const nav = screen.getByRole('navigation', { name: 'Primary pages' });
+    await user.click(within(nav).getByRole('button', { name: 'Inspirations' }));
+    await user.click(screen.getByRole('button', { name: 'Apply Luna Blue Metal to app appearance' }));
+
+    const appRoot = screen.getByTestId('app-root');
+    expect(appRoot).toHaveStyle({ '--app-accent': '#54ACBF' });
+    expect(appRoot).toHaveAttribute('data-app-material', 'glass');
+  });
 });
